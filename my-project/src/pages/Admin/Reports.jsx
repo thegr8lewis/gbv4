@@ -47,7 +47,7 @@ export default function Reports() {
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   
   // Define the media URL base
-  const MEDIA_URL = 'http://localhost:8000/media/';
+  const MEDIA_URL = 'https://safespacekenya.onrender.com/media/';
 
   // Get auth token with validation
   const getAuthToken = () => {
@@ -73,7 +73,7 @@ export default function Reports() {
       const token = getAuthToken();
       if (!token) return;
 
-      const response = await fetch('http://localhost:8000/api/reports/list/', {
+      const response = await fetch('https://safespacekenya.onrender.com/api/reports/list/', {
         headers: { 
           'Authorization': `Token ${token}`,
           'Content-Type': 'application/json'
@@ -161,7 +161,7 @@ export default function Reports() {
       const token = getAuthToken();
       if (!token) return;
 
-      const response = await fetch(`http://localhost:8000/api/reports/${reportId}/`, {
+      const response = await fetch(`https://safespacekenya.onrender.com/api/reports/${reportId}/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

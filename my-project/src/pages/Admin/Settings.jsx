@@ -117,7 +117,7 @@ export default function SettingsPage() {
       if (credentialData.new_password) payload.new_password = credentialData.new_password;
       
       const response = await axios.post(
-        'http://localhost:8000/api/update-credentials/',
+        'https://safespacekenya.onrender.com/api/update-credentials/',
         payload,
         {
           headers: {

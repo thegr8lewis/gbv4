@@ -56,7 +56,7 @@ export default function EventsComponent() {
       const token = getAuthToken();
       if (!token) return;
 
-      const response = await fetch('http://localhost:8000/api/events/', {
+      const response = await fetch('https://safespacekenya.onrender.com/api/events/', {
         headers: { 'Authorization': `Token ${token}` }
       });
 

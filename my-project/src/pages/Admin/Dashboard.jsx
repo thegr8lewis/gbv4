@@ -49,7 +49,7 @@ export default function Dashboard() {
   const [fullscreenImage, setFullscreenImage] = useState(false);
   
   // Define the media URL base - adjust this to match your Django settings
-  const MEDIA_URL = 'http://localhost:8000/media/';
+  const MEDIA_URL = 'https://safespacekenya.onrender.com/media/';
   
   // Fetch reports from API
   const fetchReports = async () => {
@@ -62,7 +62,7 @@ export default function Dashboard() {
         return;
       }
 
-      const response = await fetch('http://localhost:8000/api/reports/list/', {
+      const response = await fetch('https://safespacekenya.onrender.com/api/reports/list/', {
         headers: {
           'Authorization': `Token ${token}`,
           'Content-Type': 'application/json',
