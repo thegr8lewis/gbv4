@@ -1,6 +1,7 @@
+
 services:
   - type: web
-    name: gbv4-app
+    name: gbv4
     env: static
     buildCommand: npm run build
     staticPublishPath: ./dist
