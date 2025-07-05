@@ -28,11 +28,8 @@ export default function Layout({ children, activeTab }) {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800">
       {/* Header - Animated based on scroll */}
-      <header className={`fixed top-0 left-0 right-0 py-5 px-4 text-white transition-transform duration-300 z-20 ${
-        headerVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0E3692] to-transparent opacity-90"></div>
-        <div className="relative z-10 flex justify-between items-center max-w-4xl mx-auto">
+      <header className="fixed top-0 left-0 right-0 py-5 px-4 text-white z-20 bg-gradient-to-b from-[#0E3692] to-transparent opacity-90">
+        <div className="flex justify-between items-center max-w-4xl mx-auto">
           <div className="flex items-center space-x-3">
             <img 
               src={kenyanFlag} 
@@ -45,7 +42,7 @@ export default function Layout({ children, activeTab }) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto pt-16 max-w-4xl mx-auto w-full">
+      <main className="flex-1 overflow-y-auto pt-16 pb-10px max-w-4xl mx-auto w-full">
         {children}
       </main>
 
