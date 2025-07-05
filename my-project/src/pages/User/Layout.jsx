@@ -45,7 +45,7 @@ export default function Layout({ children, activeTab }) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto pt-16 pb-20 px-4 max-w-4xl mx-auto w-full">
+      <main className="flex-1 overflow-y-auto pt-16 max-w-4xl mx-auto w-full">
         {children}
       </main>
 
