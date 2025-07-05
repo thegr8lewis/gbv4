@@ -5,12 +5,12 @@ import withReactContent from 'sweetalert2-react-content';
 import {  API_BASE_URL } from './apiConfig';
 
 // Create lazy-loaded components with error boundaries
-const InstructionsComponent = lazy(() => import('/src/pages/user/Instruction')
+const InstructionsComponent = lazy(() => import('/src/pages/User/Instruction')
   .catch(() => ({ 
     default: () => <div className="text-red-500 p-4">Instructions component failed to load</div> 
   })));
 
-const ReportResponse = lazy(() => import('/src/pages/user/ReportResponse')
+const ReportResponse = lazy(() => import('/src/pages/User/ReportResponse')
   .catch(() => ({ 
     default: () => <div className="text-red-500 p-4">Report response component failed to load</div> 
   })));
