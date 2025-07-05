@@ -1,20 +1,40 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import AdminRoutes from "./routes/AdminRoutes";
+// import UserRoutes from "./routes/UserRoutes";
+
+
+
+// function App() {
+//   return (
+//     <Router>
+//       <Routes>
+        
+//         {/* Admin Dashboard Routes */}
+//         <Route path="/admin/*" element={<AdminRoutes />} />
+
+//         <Route path="*" element={<UserRoutes />} />
+
+//       </Routes>
+//     </Router>
+//   );
+// }
+
+// export default App;
+
+
+import { Routes, Route } from "react-router-dom";
 import AdminRoutes from "./routes/AdminRoutes";
 import UserRoutes from "./routes/UserRoutes";
 
-
 function App() {
   return (
-    <Router>
-      <Routes>
-        
-        {/* Admin Dashboard Routes */}
-        <Route path="/admin/*" element={<AdminRoutes />} />
-
-        <Route path="*" element={<UserRoutes />} />
-
-      </Routes>
-    </Router>
+    <Routes>
+      {/* Admin routes - prefixed with /admin */}
+      <Route path="/admin/*" element={<AdminRoutes />} />
+      
+      {/* User routes - catch all other paths */}
+      <Route path="/*" element={<UserRoutes />} />
+    </Routes>
   );
 }
 
