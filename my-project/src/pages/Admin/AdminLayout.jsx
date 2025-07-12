@@ -15,12 +15,28 @@ import {
   Clock
 } from 'lucide-react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
-export default function AdminLayout({ children, activeNavItem }) {
+export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [adminName, setAdminName] = useState('Admin');
   const [newReportsCount, setNewReportsCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  
+  // Determine active nav item based on current path
+  const getActiveNavItem = () => {
+    const path = location.pathname;
+    if (path.includes('dashboard')) return 'Dashboard';
+    if (path.includes('reports')) return 'Reports';
+    if (path.includes('support')) return 'Support';
+    if (path.includes('updates')) return 'Updates';
+    if (path.includes('events')) return 'Events';
+    if (path.includes('settings')) return 'Settings';
+    return 'Dashboard';
+  };
+
+  const activeNavItem = getActiveNavItem();
 
   useEffect(() => {
     // Fetch admin details
@@ -82,17 +98,17 @@ export default function AdminLayout({ children, activeNavItem }) {
       {/* Sidebar */}
       <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:block`}>
         <div className="flex items-center h-16 px-6 border-b">
-        <div className="flex items-center space-x-3">
-  <img 
-    src={kenyanFlag} 
-    alt="Kenyan Flag" 
-    className="h-12 w-auto"
-  />
-  <div className="flex flex-col">
-    <h1 className="text-2xl font-bold">ADMIN</h1>
-    <p className="text-sm font-semibold text-gray-600">SafeSpace</p>
-  </div>
-</div>
+          <div className="flex items-center space-x-3">
+            <img 
+              src={kenyanFlag} 
+              alt="Kenyan Flag" 
+              className="h-12 w-auto"
+            />
+            <div className="flex flex-col">
+              <h1 className="text-2xl font-bold">ADMIN</h1>
+              <p className="text-sm font-semibold text-gray-600">SafeSpace</p>
+            </div>
+          </div>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden ml-auto">
             <X className="w-6 h-6 text-gray-500" />
           </button>
