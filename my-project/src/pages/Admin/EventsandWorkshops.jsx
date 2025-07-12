@@ -119,7 +119,7 @@ export default function EventsComponent() {
       const token = getAuthToken();
       if (!token) return;
 
-      const endpoint = `http://localhost:8000/api/events/${itemToDelete.id}/`;
+      const endpoint = `https://safespacekenya.onrender.com/api/events/${itemToDelete.id}/`;
       const response = await fetch(endpoint, {
         method: 'DELETE',
         headers: { 'Authorization': `Token ${token}` }
@@ -156,7 +156,7 @@ export default function EventsComponent() {
       const token = getAuthToken();
       if (!token) return;
 
-      const response = await fetch('http://localhost:8000/api/events/', {
+      const response = await fetch('https://safespacekenya.onrender.com/api/events/', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ export default function EventsComponent() {
       const token = getAuthToken();
       if (!token) return;
 
-      const response = await fetch(`http://localhost:8000/api/events/${editingEventId}/`, {
+      const response = await fetch(`https://safespacekenya.onrender.com/api/events/${editingEventId}/`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
