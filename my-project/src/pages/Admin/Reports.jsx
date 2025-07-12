@@ -14,7 +14,7 @@ import {
   List,
   ChevronDown
 } from 'lucide-react';
-import AdminLayout from '/src/pages/Admin/AdminLayout.jsx';
+
 
 export default function Reports() {
   const navigate = useNavigate();
@@ -227,7 +227,7 @@ export default function Reports() {
     );
   }
   return (
-    <AdminLayout activeNavItem="Reports">
+    <>
       <div className="max-w-7xl mx-auto">
         {error && (
           <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
@@ -650,6 +650,6 @@ export default function Reports() {
           </div>
         </div>
       )}
-    </AdminLayout>
+    </>
   );
 }

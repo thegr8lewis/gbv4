@@ -11,7 +11,7 @@ import {
   Search, 
   PlusCircle 
 } from 'lucide-react';
-import AdminLayout from '/src/pages/Admin/AdminLayout.jsx';
+
 
 export default function Support() {
   const navigate = useNavigate();
@@ -280,7 +280,7 @@ export default function Support() {
   }
 
   return (
-    <AdminLayout activeNavItem="Support">
+    <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Delete Confirmation Modal */}
         {showDeleteModal && (
@@ -531,6 +531,6 @@ export default function Support() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </>
   );
 }

@@ -13,7 +13,6 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import AdminLayout from '/src/pages/Admin/AdminLayout.jsx';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -256,7 +255,7 @@ export default function Dashboard() {
   }
 
   return (
-    <AdminLayout activeNavItem="Dashboard">
+    <>
       <div className="max-w-7xl mx-auto">
         {error && (
           <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
@@ -684,6 +683,6 @@ export default function Dashboard() {
           </div>
         </div>
       )}
-    </AdminLayout>
+    </>
   );
 }

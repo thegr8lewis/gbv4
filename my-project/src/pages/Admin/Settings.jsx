@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Settings, Lock, Mail, Eye, EyeOff, CheckCircle, XCircle, Bell } from 'lucide-react';
-import AdminLayout from '/src/pages/Admin/AdminLayout.jsx';
 import axios from 'axios';
 
 export default function SettingsPage() {
@@ -172,7 +171,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <AdminLayout activeNavItem="Settings">
+    <>
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Account Security */}
         <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -322,6 +321,6 @@ export default function SettingsPage() {
           </form>
         </div>
       </div>
-    </AdminLayout>
+    </>
   );
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Bell, Edit2, Trash2, X, Send, PlusCircle } from 'lucide-react';
-import AdminLayout from '/src/pages/Admin/AdminLayout.jsx';
 
 export default function Updates() {
   const navigate = useNavigate();
@@ -280,7 +279,7 @@ export default function Updates() {
   }
 
   return (
-    <AdminLayout activeNavItem="Updates">
+    <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Delete Confirmation Modal */}
         {showDeleteModal && (
@@ -535,6 +534,6 @@ export default function Updates() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </>
   );
 }
