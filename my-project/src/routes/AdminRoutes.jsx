@@ -8,6 +8,7 @@ import Support from "../pages/Admin/Support";
 import Reports from "../pages/Admin/Reports";
 import Login from "../pages/Admin/Login";
 import Updates from "../pages/Admin/Updates";
+import PsychologistDashboard from '../pages/Admin/PsychologistDashboard';
 
 const AdminRoutes = () => {
   return (
@@ -18,6 +19,9 @@ const AdminRoutes = () => {
       
       {/* Admin dashboard routes - with layout wrapper */}
       <Route path="dashboard" element={<AdminLayoutWrapper><Dashboard /></AdminLayoutWrapper>} />
+      <Route path="psychologist-dashboard" element={<AdminLayoutWrapper><PsychologistDashboard /></AdminLayoutWrapper>} />
+      
+      {/* Other admin routes - all wrapped in AdminLayout */}
       <Route path="events" element={<AdminLayoutWrapper><Events /></AdminLayoutWrapper>} />
       <Route path="settings" element={<AdminLayoutWrapper><Settings /></AdminLayoutWrapper>} />
       <Route path="support" element={<AdminLayoutWrapper><Support /></AdminLayoutWrapper>} />
@@ -37,6 +41,7 @@ const AdminLayoutWrapper = ({ children }) => {
   
   // Determine active nav item based on current path
   let activeNavItem = 'Dashboard'; // default
+  if (pathname.includes('/admin/psychologist-dashboard')) activeNavItem = 'Psychologist Dashboard';
   if (pathname.includes('/admin/reports')) activeNavItem = 'Reports';
   if (pathname.includes('/admin/support')) activeNavItem = 'Support';
   if (pathname.includes('/admin/updates')) activeNavItem = 'Updates';

@@ -9,6 +9,8 @@ import GBVApp from "../pages/User/SGBVApp";
 import Layout from '../pages/User/Layout';
 import Response from "../pages/User/ReportResponse";
 import Instruction from "../pages/User/Instruction";
+import PsychologistDirectory from '../pages/Psychologist/PsychologistDirectory';
+import PsychologistProfile from '../pages/Psychologist/PsychologistProfile';
 
 const UserRoutes = () => {
   return (
@@ -21,6 +23,10 @@ const UserRoutes = () => {
         <Route path="home" element={<Home />} />
         <Route path="report" element={<Report />} />
         <Route path="emergency" element={<Emergency />} />
+
+        <Route path="/psychologists" element={<PsychologistDirectory />} />
+        <Route path="/psychologists/:id" element={<PsychologistProfile />} />
+        
         <Route path="about" element={<About />} />
         <Route path="updates" element={<Update />} />
         <Route path="report-response" element={<Response />} />

@@ -1,3 +1,249 @@
+// import { AlertTriangle, Phone, ArrowRight, Info, Bell, Shield, Heart, Users, Lock, CheckCircle, Star } from 'lucide-react';
+// import { useState, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import {  API_BASE_URL } from './apiConfig';
+
+// export default function HomeScreen({ isLoggedIn }) {
+//   const [latestUpdates, setLatestUpdates] = useState([]);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchLatestUpdates = async () => {
+//       try {
+//         const response = await fetch(`${API_BASE_URL}/public/updates/?ordering=-created_at`);
+//         if (!response.ok) {
+//           throw new Error('Failed to fetch updates');
+//         }
+//         const data = await response.json();
+//         setLatestUpdates(data.slice(0, 3));
+//       } catch (err) {
+//         setError(err.message);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     fetchLatestUpdates();
+//   }, []);
+
+//   const formatDate = (dateString) => {
+//     const options = { day: 'numeric', month: 'short', year: 'numeric' };
+//     return new Date(dateString).toLocaleDateString('en-US', options);
+//   };
+
+//   return (
+//     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+//       {/* Hero Section */}
+//       <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-xl p-6 sm:p-8 text-white shadow-lg mb-6 sm:mb-8 relative overflow-hidden">
+//         <div className="absolute inset-0 bg-blue-500 opacity-10 rounded-full scale-150 translate-x-1/2 -translate-y-1/4"></div>
+//         <div className="relative z-10">
+//           <div className="flex items-center mb-3 sm:mb-4">
+//             <div className="bg-white/20 p-2 sm:p-3 rounded-full">
+//               <Shield size={20} className="text-white" />
+//             </div>
+//             <h2 className="text-xl sm:text-2xl font-bold ml-3">Your Safety is Our Priority</h2>
+//           </div>
+//           <p className="text-base sm:text-lg mb-4 sm:mb-6 opacity-90">
+//             SafeSpace provides a secure platform to report and address sexual and gender-based violence. 
+//             Every report is handled with complete confidentiality and compassion.
+//           </p>
+//           <div className="flex flex-col sm:flex-row gap-3">
+//             <button 
+//               onClick={() => navigate('/report')}
+//               className="bg-white text-blue-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium shadow-lg hover:shadow-xl transition duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
+//             >
+//               <Shield size={16} />
+//               <span>{isLoggedIn ? 'Report an Incident' : 'Learn How to Report'}</span>
+//               <ArrowRight size={16} />
+//             </button>
+//             <button 
+//               onClick={() => navigate('/about')}
+//               className="bg-white/10 text-white border border-white/30 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium hover:bg-white/20 transition duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
+//             >
+//               <Info size={16} />
+//               <span>Learn About SGBV</span>
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Trust Indicators */}
+//       <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+//         <div className="flex items-center mb-4 sm:mb-5">
+//           <div className="bg-green-50 p-2 sm:p-3 rounded-full">
+//             <CheckCircle size={20} className="text-green-700" />
+//           </div>
+//           <h3 className="text-lg sm:text-xl font-semibold ml-3">Why Choose SafeSpace?</h3>
+//         </div>
+        
+//         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+//           <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+//             <div className="flex items-center mb-2 sm:mb-3">
+//               <div className="bg-blue-200 p-1.5 sm:p-2 rounded-full">
+//                 <Lock size={16} className="text-blue-700" />
+//               </div>
+//               <h4 className="font-medium ml-2 sm:ml-3 text-blue-800 text-sm sm:text-base">100% Confidential</h4>
+//             </div>
+//             <p className="text-gray-700 text-xs sm:text-sm">Your identity and information are protected with the highest security standards.</p>
+//           </div>
+          
+//           <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+//             <div className="flex items-center mb-2 sm:mb-3">
+//               <div className="bg-green-200 p-1.5 sm:p-2 rounded-full">
+//                 <Heart size={16} className="text-green-700" />
+//               </div>
+//               <h4 className="font-medium ml-2 sm:ml-3 text-green-800 text-sm sm:text-base">Compassionate Support</h4>
+//             </div>
+//             <p className="text-gray-700 text-xs sm:text-sm">Our trained professionals provide empathetic support throughout your journey.</p>
+//           </div>
+          
+//           <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+//             <div className="flex items-center mb-2 sm:mb-3">
+//               <div className="bg-purple-200 p-1.5 sm:p-2 rounded-full">
+//                 <Users size={16} className="text-purple-700" />
+//               </div>
+//               <h4 className="font-medium ml-2 sm:ml-3 text-purple-800 text-sm sm:text-base">Community Focused</h4>
+//             </div>
+//             <p className="text-gray-700 text-xs sm:text-sm">Together, we're building a safer environment for everyone in our community.</p>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Quick Access Cards */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 my-6 sm:mb-8">
+//         {/* Emergency Support */}
+//         <div className="bg-white rounded-xl p-4 sm:p-6 hover:shadow-lg transition duration-300">
+//           <div className="flex items-center mb-3 sm:mb-4">
+//             <div className="bg-red-50 p-2 sm:p-3 rounded-full">
+//               <AlertTriangle size={20} className="text-red-500" />
+//             </div>
+//             <h3 className="text-lg sm:text-xl font-semibold ml-3">Emergency Support</h3>
+//           </div>
+//           <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
+//             Need immediate help? Access emergency contacts and crisis support available 24/7.
+//           </p>
+//           <div className="bg-red-50 p-3 sm:p-4 rounded-lg border border-red-100 mb-3 sm:mb-4">
+//             <div className="flex items-center">
+//               <Phone size={14} className="text-red-600 mr-2" />
+//               <span className="text-xs sm:text-sm font-medium text-red-700">24/7 Crisis Hotline Available</span>
+//             </div>
+//           </div>
+//           <button 
+//             onClick={() => navigate('/emergency')}
+//             className="w-full text-red-500 border border-red-500 px-4 py-2 sm:py-3 rounded-lg font-medium hover:bg-red-50 transition-colors flex items-center justify-center text-sm sm:text-base"
+//           >
+//             <Phone size={16} className="mr-2" />
+//             Access Emergency Contacts
+//           </button>
+//         </div>
+
+//         {/* Resources & Information */}
+//         <div className="bg-white rounded-xl p-4 sm:p-6 hover:shadow-lg transition duration-300">
+//           <div className="flex items-center mb-3 sm:mb-4">
+//             <div className="bg-blue-50 p-2 sm:p-3 rounded-full">
+//               <Info size={20} className="text-blue-700" />
+//             </div>
+//             <h3 className="text-lg sm:text-xl font-semibold ml-3">Resources & Information</h3>
+//           </div>
+//           <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
+//             Learn about gender equity, support services, and how to identify and prevent SGBV.
+//           </p>
+//           <div className="bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-100 mb-3 sm:mb-4">
+//             <div className="flex items-center">
+//               <Star size={14} className="text-blue-600 mr-2" />
+//               <span className="text-xs sm:text-sm font-medium text-blue-700">Comprehensive Support Directory</span>
+//             </div>
+//           </div>
+//           <button 
+//             onClick={() => navigate('/about')}
+//             className="w-full text-blue-700 border border-blue-700 px-4 py-2 sm:py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors flex items-center justify-center text-sm sm:text-base"
+//           >
+//             Learn More
+//             <ArrowRight size={16} className="ml-2" />
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Latest Updates Section */}
+//       <div className="bg-gray-50 rounded-xl p-4 sm:p-6 shadow-md border border-gray-100">
+//         <div className="flex items-center justify-between mb-4 sm:mb-5">
+//           <div className="flex items-center">
+//             <div className="bg-indigo-50 p-2 sm:p-3 rounded-full">
+//               <Bell size={20} className="text-indigo-700" />
+//             </div>
+//             <h3 className="text-lg sm:text-xl font-semibold ml-3">Latest Updates</h3>
+//           </div>
+//           <button 
+//             onClick={() => navigate('/updates')}
+//             className="text-blue-700 text-xs sm:text-sm font-medium hover:underline flex items-center"
+//           >
+//             View all updates
+//             <ArrowRight size={12} className="ml-1" />
+//           </button>
+//         </div>
+        
+//         {isLoading ? (
+//           <div className="space-y-2 sm:space-y-3">
+//             {[...Array(3)].map((_, i) => (
+//               <div key={i} className="bg-white p-3 sm:p-4 rounded-lg shadow-sm animate-pulse">
+//                 <div className="h-4 sm:h-5 bg-gray-200 rounded w-3/4 mb-1 sm:mb-2"></div>
+//                 <div className="h-3 sm:h-4 bg-gray-200 rounded w-1/2"></div>
+//               </div>
+//             ))}
+//           </div>
+//         ) : error ? (
+//           <div className="text-red-500 text-xs sm:text-sm bg-red-50 p-3 sm:p-4 rounded-lg border border-red-100">
+//             <div className="flex items-center">
+//               <AlertTriangle size={14} className="mr-2" />
+//               {error}
+//             </div>
+//           </div>
+//         ) : latestUpdates.length > 0 ? (
+//           <div className="space-y-2 sm:space-y-3">
+//             {latestUpdates.map((update) => (
+//               <div key={update.id} className="bg-white p-3 sm:p-5 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-blue-500">
+//                 <div className="flex justify-between items-start">
+//                   <div className="flex-1">
+//                     <h4 className="font-medium text-gray-800 mb-1 text-sm sm:text-base">{update.title}</h4>
+//                     <p className="text-xs text-gray-500">{formatDate(update.created_at)}</p>
+//                   </div>
+//                   <button
+//                     onClick={() => navigate('/updates')}
+//                     className="text-blue-700 text-xs flex items-center hover:underline ml-2 sm:ml-4"
+//                   >
+//                     View <ArrowRight size={12} className="ml-1" />
+//                   </button>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         ) : (
+//           <div className="bg-white p-4 sm:p-6 rounded-lg text-gray-500 text-center">
+//             <Bell size={28} className="mx-auto mb-2 text-gray-300" />
+//             <p className="text-sm sm:text-base">No updates available at the moment</p>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* Support Message */}
+//       <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl mt-6 sm:mt-8 border border-green-100">
+//         <div className="text-center p-4 sm:p-6">
+//           <div className="bg-green-100 p-2 sm:p-3 rounded-full w-fit mx-auto mb-3 sm:mb-4">
+//             <Heart size={20} className="text-green-700" />
+//           </div>
+//           <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">Remember: You Are Not Alone</h3>
+//           <p className="text-gray-600 text-xs sm:text-sm">
+//             Our community is here to support you every step of the way. Your courage in speaking up helps create a safer environment for everyone.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
 import { AlertTriangle, Phone, ArrowRight, Info, Bell, Shield, Heart, Users, Lock, CheckCircle, Star } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -108,6 +354,30 @@ export default function HomeScreen({ isLoggedIn }) {
               <h4 className="font-medium ml-2 sm:ml-3 text-purple-800 text-sm sm:text-base">Community Focused</h4>
             </div>
             <p className="text-gray-700 text-xs sm:text-sm">Together, we're building a safer environment for everyone in our community.</p>
+          </div>
+        </div>
+
+        {/* New Psychologist Support Section */}
+        <div className="mt-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-100">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+            <div className="flex items-start mb-4 sm:mb-0">
+              <div className="bg-indigo-100 p-2 sm:p-3 rounded-full mr-3">
+                <Heart size={20} className="text-indigo-700" />
+              </div>
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold text-indigo-800">Professional Psychological Support</h3>
+                <p className="text-gray-600 text-sm sm:text-base mt-1">
+                  Connect with licensed psychologists specializing in trauma and recovery.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate('/psychologists')}
+              className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors flex items-center justify-center text-sm sm:text-base"
+            >
+              <Users size={16} className="mr-2" />
+              Book Psychologist
+            </button>
           </div>
         </div>
       </div>
