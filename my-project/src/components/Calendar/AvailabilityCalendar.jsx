@@ -7,7 +7,7 @@ import startOfWeek from 'date-fns/startOfWeek';
 import getDay from 'date-fns/getDay';
 import { addHours } from 'date-fns';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { auth } from '/src/Firebase';
+import { auth } from '/src/firebase';
 import enUS from 'date-fns/locale/en-US';
 import {  API_BASE_URL } from '/src/pages/User/apiConfig';
 

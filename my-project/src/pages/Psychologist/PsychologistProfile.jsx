@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { auth } from '/src/Firebase';
+import { auth } from '/src/firebase';
 import { User, Globe, Award, Calendar as CalendarIcon, Clock, Phone, Mail, ArrowLeft, CheckCircle, XCircle, Shield } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

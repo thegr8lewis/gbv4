@@ -1,6 +1,6 @@
 import { GoogleLogin } from '@react-oauth/google';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '/src/Firebase';
+import { auth, db } from '/src/firebase';
 
 export default function GoogleAuthButton({ onSuccess }) {
   const handleSuccess = async (credentialResponse) => {

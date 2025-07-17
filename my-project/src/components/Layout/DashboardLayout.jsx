@@ -2,7 +2,7 @@
 // components/Layout/DashboardLayout.jsx
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { auth } from '/src/Firebase';
+import { auth } from '/src/firebase';
 import { useAuth } from '/src/contexts/AuthContext';
 
 // Import your components
