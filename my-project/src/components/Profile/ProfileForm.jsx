@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { auth } from '/src/firebase';
-import {  API_BASE_URL } from '/src/pages/User/apiConfig';
+import {  API_BASE_URL } from './apiConfig';
 
 const languageOptions = [
   { value: 'English', label: 'English' },

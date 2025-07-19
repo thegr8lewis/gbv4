@@ -1,16 +1,3 @@
-// import { initializeApp } from "firebase/app";
-// import { getAuth, GoogleAuthProvider } from "firebase/auth";
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyBZBwPLPvNU_DwKth9rvy1iQbz5WB4vhes",
-//   authDomain: "safespace-2de5d.firebaseapp.com",
-//   projectId: "safespace-2de5d",
-//   // etc
-// };
-
-// const app = initializeApp(firebaseConfig);
-// export const auth = getAuth(app);
-// export const googleProvider = new GoogleAuthProvider();
 
 
 import { initializeApp } from "firebase/app";

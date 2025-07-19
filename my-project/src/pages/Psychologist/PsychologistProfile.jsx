@@ -6,7 +6,7 @@ import { User, Globe, Award, Calendar as CalendarIcon, Clock, Phone, Mail, Arrow
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format, parseISO } from 'date-fns';
-import {  API_BASE_URL } from '/src/pages/User/apiConfig';
+import {  API_BASE_URL } from './apiConfig';
 
 export default function PsychologistProfile() {
   const { id } = useParams();

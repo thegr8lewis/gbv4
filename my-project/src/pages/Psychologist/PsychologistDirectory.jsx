@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Globe, Award, RefreshCw, Search, Shield, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import {  API_BASE_URL } from '/src/pages/User/apiConfig';
+import {  API_BASE_URL } from './apiConfig';
 
 const PsychologistsDirectory = () => {
   const [psychologists, setPsychologists] = useState([]);

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { auth } from '/src/firebase';
 import { Calendar, Clock, Video, User as UserIcon } from 'lucide-react';
-import {  API_BASE_URL } from '/src/pages/User/apiConfig';
+import {  API_BASE_URL } from './apiConfig';
 
 export default function UpcomingSessions() {
   const [bookings, setBookings] = useState([]);

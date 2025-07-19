@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { auth } from '/src/firebase';
-import {  API_BASE_URL } from '/src/pages/User/apiConfig';
+import {  API_BASE_URL } from './apiConfig';
 
 export default function PastAppointments() {
   const [appointments, setAppointments] = useState([]);
