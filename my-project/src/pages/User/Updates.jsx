@@ -337,7 +337,7 @@ export default function UpdatesScreen() {
           </div>
         )}
 
-        {activeTab === 'events' && (
+        {/* {activeTab === 'events' && (
           <div className="space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Upcoming Events</h2>
@@ -375,6 +375,83 @@ export default function UpdatesScreen() {
                             className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg transition-colors flex items-center text-sm sm:text-base"
                           >
                             <svg className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Add to calendar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="bg-gray-50 rounded-lg sm:rounded-xl p-6 sm:p-8 text-center">
+                  <svg className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-gray-500 mt-3 sm:mt-4 text-base sm:text-lg">No upcoming events scheduled.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )} */}
+
+        {activeTab === 'events' && (
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Upcoming Events</h2>
+              <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
+                {events.length} {events.length === 1 ? 'Event' : 'Events'}
+              </span>
+            </div>
+            
+            <div className="grid gap-3 sm:gap-6 mt-4 sm:mt-6">
+              {events.length > 0 ? (
+                events.map((event, index) => (
+                  <div 
+                    key={index} 
+                    className="bg-white rounded-lg sm:rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200"
+                  >
+                    {/* Mobile-first stacked layout */}
+                    <div className="flex flex-col">
+                      {/* Date/Time header - full width on mobile */}
+                      <div className="bg-indigo-600 text-white p-3 sm:p-4 text-center sm:text-left">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                            <span className="text-base sm:text-lg font-bold">
+                              {event.date?.split(',')[0] || 'TBA'}
+                            </span>
+                            <span className="text-sm opacity-90 mt-1 sm:mt-0">
+                              {event.time || 'Time TBA'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Event details */}
+                      <div className="p-3 sm:p-6">
+                        <h3 className="font-semibold text-lg sm:text-xl text-gray-900 mb-2">
+                          {event.title || 'Untitled Event'}
+                        </h3>
+                        
+                        {/* Location with better mobile spacing */}
+                        <div className="flex items-start mb-4">
+                          <svg className="h-4 w-4 text-gray-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <span className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                            {event.location || 'Location TBA'}
+                          </span>
+                        </div>
+                        
+                        {/* Action button - full width on small screens */}
+                        <div className="w-full sm:w-auto sm:flex sm:justify-end">
+                          <button 
+                            onClick={() => openCalendarModal(event)}
+                            className="w-full sm:w-auto bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium py-2.5 px-4 sm:py-2 sm:px-4 rounded-lg transition-colors flex items-center justify-center text-sm sm:text-base"
+                          >
+                            <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             Add to calendar
