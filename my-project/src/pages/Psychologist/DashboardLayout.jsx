@@ -14,7 +14,6 @@ export default function DashboardLayout() {
       console.error("Error signing out: ", error);
     }
   };
-
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}

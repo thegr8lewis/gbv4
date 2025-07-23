@@ -1,37 +1,24 @@
-
-import { Routes, Route } from "react-router-dom";
-import Login from "/src/components/Auth/Login";
-import SignUp from "/src/components/Auth/SignUp";
-import ForgotPassword from "/src/components/Auth/ForgotPassword";
-import AdminRoutes from "./routes/AdminRoutes";
-import UserRoutes from "./routes/UserRoutes";
-import PsychologistRoutes from "./routes/PsychologistRoutes";
-import PrivateRoute from './components/Auth/PrivateRoute';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AdminRoutes from './routes/AdminRoutes';
+import UserRoutes from './routes/UserRoutes';
+import PsychologistRoutes from './routes/PsychologistRoutes';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+    <AuthProvider>
+      <Routes>
+        {/* Role-based dashboard routes */}
+        <Route path="/admin/*" element={<AdminRoutes />} />
+        <Route path="/dashboard/*" element={<PsychologistRoutes />} />
 
-      {/* Admin routes */}
-      <Route path="/admin/*" element={<AdminRoutes />} />
+        {/* Default user-facing routes */}
+        <Route path="/*" element={<UserRoutes />} />
 
-      {/* Psychologist routes */}
-      <Route 
-        path="/dashboard/*" 
-        element={
-          <PrivateRoute allowedRoles={['psychologist']}>
-            <PsychologistRoutes />
-          </PrivateRoute>
-        } 
-      />
-
-      {/* Default fallback to user routes */}
-      <Route path="/*" element={<UserRoutes />} />
-    </Routes>
+        {/* Fallback route */}
+        {/* <Route path="/" element={<Navigate to="/dashboard" replace />} /> */}
+      </Routes>
+    </AuthProvider>
   );
 }
 
