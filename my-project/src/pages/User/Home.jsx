@@ -34,7 +34,7 @@ export default function HomeScreen({ isLoggedIn }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="max-w-4xl mx-auto px-2 sm:px-6 py-0 sm:py-0">
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-xl p-6 sm:p-8 text-white shadow-lg mb-6 sm:mb-8 relative overflow-hidden">
@@ -136,125 +136,137 @@ export default function HomeScreen({ isLoggedIn }) {
         </div>
       </div>
 
-      {/* Quick Access Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 my-6 sm:mb-8">
-        {/* Emergency Support */}
-        <div className="bg-white rounded-xl p-4 sm:p-6 hover:shadow-lg transition duration-300">
-          <div className="flex items-center mb-3 sm:mb-4">
-            <div className="bg-red-50 p-2 sm:p-3 rounded-full">
-              <AlertTriangle size={20} className="text-red-500" />
-            </div>
-            <h3 className="text-lg sm:text-xl font-semibold ml-3">Emergency Support</h3>
-          </div>
-          <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
-            Need immediate help? Access emergency contacts and crisis support available 24/7.
-          </p>
-          <div className="bg-red-50 p-3 sm:p-4 rounded-lg border border-red-100 mb-3 sm:mb-4">
-            <div className="flex items-center">
-              <Phone size={14} className="text-red-600 mr-2" />
-              <span className="text-xs sm:text-sm font-medium text-red-700">24/7 Crisis Hotline Available</span>
-            </div>
-          </div>
-          <button 
-            onClick={() => navigate('/emergency')}
-            className="w-full text-red-500 border border-red-500 px-4 py-2 sm:py-3 rounded-lg font-medium hover:bg-red-50 transition-colors flex items-center justify-center text-sm sm:text-base"
-          >
-            <Phone size={16} className="mr-2" />
-            Access Emergency Contacts
-          </button>
-        </div>
-
-        {/* Resources & Information */}
-        <div className="bg-white rounded-xl p-4 sm:p-6 hover:shadow-lg transition duration-300">
-          <div className="flex items-center mb-3 sm:mb-4">
-            <div className="bg-blue-50 p-2 sm:p-3 rounded-full">
-              <Info size={20} className="text-blue-700" />
-            </div>
-            <h3 className="text-lg sm:text-xl font-semibold ml-3">Resources & Information</h3>
-          </div>
-          <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
-            Learn about gender equity, support services, and how to identify and prevent SGBV.
-          </p>
-          <div className="bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-100 mb-3 sm:mb-4">
-            <div className="flex items-center">
-              <Star size={14} className="text-blue-600 mr-2" />
-              <span className="text-xs sm:text-sm font-medium text-blue-700">Comprehensive Support Directory</span>
-            </div>
-          </div>
-          <button 
-            onClick={() => navigate('/about')}
-            className="w-full text-blue-700 border border-blue-700 px-4 py-2 sm:py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors flex items-center justify-center text-sm sm:text-base"
-          >
-            Learn More
-            <ArrowRight size={16} className="ml-2" />
-          </button>
-        </div>
-      </div>
 
       {/* Latest Updates Section */}
-      <div className="bg-gray-50 rounded-xl p-4 sm:p-6 shadow-md border border-gray-100">
-        <div className="flex items-center justify-between mb-4 sm:mb-5">
-          <div className="flex items-center">
-            <div className="bg-indigo-50 p-2 sm:p-3 rounded-full">
-              <Bell size={20} className="text-indigo-700" />
-            </div>
-            <h3 className="text-lg sm:text-xl font-semibold ml-3">Latest Updates</h3>
-          </div>
+      {/* Latest Updates Section */}
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-semibold text-gray-900">Recent Updates</h3>
           <button 
             onClick={() => navigate('/updates')}
-            className="text-blue-700 text-xs sm:text-sm font-medium hover:underline flex items-center"
+            className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors flex items-center"
           >
-            View all updates
-            <ArrowRight size={12} className="ml-1" />
+            <ArrowRight size={14} className="mr-2" />
+            View All Updates
           </button>
         </div>
-        
+                
         {isLoading ? (
-          <div className="space-y-2 sm:space-y-3">
+          <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white p-3 sm:p-4 rounded-lg shadow-sm animate-pulse">
-                <div className="h-4 sm:h-5 bg-gray-200 rounded w-3/4 mb-1 sm:mb-2"></div>
-                <div className="h-3 sm:h-4 bg-gray-200 rounded w-1/2"></div>
+              <div key={i} className="bg-gray-50 p-4 rounded-lg animate-pulse">
+                <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
               </div>
             ))}
           </div>
         ) : error ? (
-          <div className="text-red-500 text-xs sm:text-sm bg-red-50 p-3 sm:p-4 rounded-lg border border-red-100">
-            <div className="flex items-center">
-              <AlertTriangle size={14} className="mr-2" />
-              {error}
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="flex items-center text-red-700">
+              <span className="text-sm font-medium">Unable to load updates</span>
             </div>
+            <p className="text-red-600 text-sm mt-1">{error}</p>
           </div>
         ) : latestUpdates.length > 0 ? (
-          <div className="space-y-2 sm:space-y-3">
+          <div className="space-y-3">
             {latestUpdates.map((update) => (
-              <div key={update.id} className="bg-white p-3 sm:p-5 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-blue-500">
+              <div key={update.id} className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors border-l-4 border-blue-500">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-800 mb-1 text-sm sm:text-base">{update.title}</h4>
-                    <p className="text-xs text-gray-500">{formatDate(update.created_at)}</p>
+                    <h4 className="font-medium text-gray-900 mb-1 leading-tight">{update.title}</h4>
+                    <p className="text-sm text-gray-500">{formatDate(update.created_at)}</p>
                   </div>
                   <button
                     onClick={() => navigate('/updates')}
-                    className="text-blue-700 text-xs flex items-center hover:underline ml-2 sm:ml-4"
+                    className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors flex items-center ml-4 flex-shrink-0"
                   >
-                    View <ArrowRight size={12} className="ml-1" />
+                    <ArrowRight size={14} className="mr-1" />
+                    View
                   </button>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="bg-white p-4 sm:p-6 rounded-lg text-gray-500 text-center">
-            <Bell size={28} className="mx-auto mb-2 text-gray-300" />
-            <p className="text-sm sm:text-base">No updates available at the moment</p>
+          <div className="bg-gray-50 p-8 rounded-lg text-center">
+            <h4 className="text-gray-700 font-medium mb-1">No Updates Available</h4>
+            <p className="text-gray-500 text-sm">Check back later for the latest information and announcements.</p>
           </div>
         )}
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center mb-4">
+            <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center mr-3">
+              <Phone size={20} className="text-red-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900">Emergency Protocols</h3>
+          </div>
+          <p className="text-gray-600 mb-6">
+            Immediate crisis intervention and safety planning with trained responders.
+          </p>
+          <div className="space-y-4">
+            <div className="flex items-start">
+              <span className="text-red-500 font-medium mr-3">24/7</span>
+              <div>
+                <h4 className="font-medium text-gray-900">Crisis Hotline</h4>
+                <p className="text-sm text-gray-600">Immediate support from trained specialists</p>
+              </div>
+            </div>
+            <div className="flex items-start">
+              <span className="text-red-500 font-medium mr-3">1hr</span>
+              <div>
+                <h4 className="font-medium text-gray-900">Response Guarantee</h4>
+                <p className="text-sm text-gray-600">Critical situations prioritized</p>
+              </div>
+            </div>
+          </div>
+          <button 
+            onClick={() => navigate('/emergency')}
+            className="mt-6 w-full text-white bg-red-600 hover:bg-red-700 py-3 rounded-lg font-medium transition-colors"
+          >
+            Access Emergency Resources
+          </button>
+        </div>
+
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center mb-4">
+            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mr-3">
+              <Info size={20} className="text-blue-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900">Resource Center</h3>
+          </div>
+          <p className="text-gray-600 mb-6">
+            Evidence-based materials on prevention, recovery, and legal rights.
+          </p>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <h4 className="font-medium text-blue-800 text-sm">Legal Guidance</h4>
+            </div>
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <h4 className="font-medium text-blue-800 text-sm">Recovery Plans</h4>
+            </div>
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <h4 className="font-medium text-blue-800 text-sm">Prevention Tools</h4>
+            </div>
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <h4 className="font-medium text-blue-800 text-sm">Support Networks</h4>
+            </div>
+          </div>
+          <button 
+            onClick={() => navigate('/resources')}
+            className="w-full text-blue-700 border border-blue-300 hover:bg-blue-50 py-3 rounded-lg font-medium"
+          >
+            Explore Educational Materials
+          </button>
+        </div>
+      </div>
+      
+
       {/* Support Message */}
       <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl mt-6 sm:mt-8 border border-green-100">
-        <div className="text-center p-4 sm:p-6">
+        <div className="text-center ">
           <div className="bg-green-100 p-2 sm:p-3 rounded-full w-fit mx-auto mb-3 sm:mb-4">
             <Heart size={20} className="text-green-700" />
           </div>
