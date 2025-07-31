@@ -34,7 +34,7 @@ export default function HomeScreen({ isLoggedIn }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-2 sm:px-6 py-0 sm:py-0">
+    <div className="max-w-4xl mx-auto px-2 sm:px-6 py-0 sm:py-0 gap-6">
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-xl p-6 sm:p-8 text-white shadow-lg mb-6 sm:mb-8 relative overflow-hidden">
