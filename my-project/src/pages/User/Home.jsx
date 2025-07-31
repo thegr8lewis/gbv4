@@ -255,7 +255,7 @@ export default function HomeScreen({ isLoggedIn }) {
             </div>
           </div>
           <button 
-            onClick={() => navigate('/resources')}
+            onClick={() => navigate('/about')}
             className="w-full text-blue-700 border border-blue-300 hover:bg-blue-50 py-3 rounded-lg font-medium"
           >
             Explore Educational Materials

@@ -11,6 +11,7 @@ import Response from "../pages/User/ReportResponse";
 import Instruction from "../pages/User/Instruction";
 import PsychologistDirectory from '../pages/Psychologist/PsychologistDirectory';
 import PsychologistProfile from '../pages/Psychologist/PsychologistProfile';
+import NotFound from '/src/components/NotFound'; 
 
 const UserRoutes = () => {
   return (
@@ -32,8 +33,7 @@ const UserRoutes = () => {
         <Route path="report-response" element={<Response />} />
         <Route path="instructions" element={<Instruction />} />
         
-        {/* Catch-all route for unmatched user paths */}
-        <Route path="*" element={<GBVApp />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
   );

@@ -155,13 +155,15 @@ export default function DashboardLayout() {
     account_status: localStorage.getItem('account_status') || 'unknown',
   });
 
-  useEffect(() => {
-    const token = localStorage.getItem('auth_token');
-    const accountStatus = localStorage.getItem('account_status');
-    if (!token || accountStatus !== 'active') {
-      navigate('/login');
-    }
-  }, [navigate]);
+ useEffect(() => {
+  const token = localStorage.getItem('auth_token');
+  const accountStatus = localStorage.getItem('account_status');
+  console.log('DashboardLayout useEffect: token=', token, 'accountStatus=', accountStatus);
+  if (!token || accountStatus !== 'active') {
+    console.log('Invalid token or account status, redirecting to /login');
+    navigate('/dashboard/login'); // Use explicit path to match PsychologistRoutes
+  }
+}, [navigate]);
 
   const handleLogout = async () => {
     try {

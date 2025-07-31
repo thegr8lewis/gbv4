@@ -32,6 +32,7 @@
     "googleapis": "^153.0.0",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.488.0",
     "react": "^19.0.0",
     "react-big-calendar": "^1.19.4",
