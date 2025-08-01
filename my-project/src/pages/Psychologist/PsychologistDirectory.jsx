@@ -1,6 +1,6 @@
 // src/components/Psychologists/PsychologistsDirectory.jsx
 import { useState, useEffect } from 'react';
-import { User, Globe, Award, RefreshCw, Search, Shield, ExternalLink } from 'lucide-react';
+import { User, Globe, Award, RefreshCw, Search, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from './apiConfig'; // Adjust path if needed
 
@@ -133,13 +133,14 @@ const PsychologistsDirectory = () => {
         <input
           type="text"
           className="block w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 border border-gray-200 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 text-sm sm:text-base"
-          placeholder="Search by name, specialization, language, or gender..."
+          placeholder="Search..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="absolute right-0 top-0 flex items-center h-full pr-2 sm:pr-3">
           <span className="text-xs sm:text-sm text-gray-500 bg-gray-100 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full">
-            {filteredPsychologists.length} professional
+             <User className="h-3 w-3 sm:h-4 sm:w-4" />
+            {filteredPsychologists.length} 
             {filteredPsychologists.length !== 1 ? 's' : ''}
           </span>
         </div>
