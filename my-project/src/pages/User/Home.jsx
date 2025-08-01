@@ -137,8 +137,7 @@ export default function HomeScreen({ isLoggedIn }) {
       </div>
 
 
-      {/* Latest Updates Section */}
-      {/* Latest Updates Section */}
+       {/* Latest Updates Section */}
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-semibold text-gray-900">Recent Updates</h3>
@@ -170,10 +169,10 @@ export default function HomeScreen({ isLoggedIn }) {
         ) : latestUpdates.length > 0 ? (
           <div className="space-y-3">
             {latestUpdates.map((update) => (
-              <div key={update.id} className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors border-l-4 border-blue-500">
+              <div key={update.id} className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors border-l-4 ">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 mb-1 leading-tight">{update.title}</h4>
+                    <h4 className="font-sm text-gray-500 mb-1 leading-tight">{update.title}</h4>
                     <p className="text-sm text-gray-500">{formatDate(update.created_at)}</p>
                   </div>
                   <button
