@@ -145,7 +145,7 @@ export default function HomeScreen({ isLoggedIn }) {
             onClick={() => navigate('/updates')}
             className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors flex items-center"
           >
-            <ArrowRight size={14} className="mr-2" />
+            <ArrowRight size={8} className="mr-2" />
             View All Updates
           </button>
         </div>
@@ -179,8 +179,8 @@ export default function HomeScreen({ isLoggedIn }) {
                     onClick={() => navigate('/updates')}
                     className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors flex items-center ml-4 flex-shrink-0"
                   >
-                    <ArrowRight size={14} className="mr-1" />
-                    View
+                    <ArrowRight size={8} className="mr-1" />
+                    Read More
                   </button>
                 </div>
               </div>
