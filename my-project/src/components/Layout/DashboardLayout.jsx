@@ -200,11 +200,11 @@ export default function DashboardLayout() {
     try {
       await api.post('/auth/logout/');
       clearLocalStorage();
-      navigate('/login');
+      navigate('/dashboard/login');
     } catch (error) {
       console.error('Error signing out:', error);
       clearLocalStorage();
-      navigate('/login');
+      navigate('/dashboard/login');
     } finally {
       setIsLoggingOut(false);
     }
