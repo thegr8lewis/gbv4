@@ -417,7 +417,7 @@ export default function Register() {
           </div>
           <p className="mt-6 text-sm text-gray-600 text-center">
             Already have an account?{' '}
-            <a href="/login" className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
+            <a href="/dashboard/login" className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
               Log in
             </a>
           </p>
