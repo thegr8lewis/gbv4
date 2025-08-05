@@ -532,6 +532,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import enUS from 'date-fns/locale/en-US';
 import api from '../../utils/api';
 import { Dialog } from '@headlessui/react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const locales = {
   'en-US': enUS,
@@ -544,6 +545,24 @@ const localizer = dateFnsLocalizer({
   getDay,
   locales,
 });
+
+function CalendarErrorFallback({ error }) {
+  return (
+    <div className="p-4 bg-red-50 border border-red-200 rounded">
+      <p className="text-red-600">Calendar error: {error.message}</p>
+      <button 
+        onClick={() => window.location.reload()}
+        className="mt-2 text-sm text-red-600 hover:text-red-800"
+      >
+        Reload Calendar
+      </button>
+    </div>
+  );
+}
+
+function isValidDate(d) {
+  return d instanceof Date && !isNaN(d);
+}
 
 export default function AvailabilityCalendar() {
   const [events, setEvents] = useState([]);
@@ -573,15 +592,17 @@ export default function AvailabilityCalendar() {
         ? response.data
         : response.data.results || response.data.availabilities || [];
 
-      setEvents(
-        availabilityArray.map((avail) => ({
+      const validEvents = availabilityArray
+        .map((avail) => ({
           id: avail.id,
           title: avail.status === 'available' ? 'Available' : 'Unavailable',
           start: new Date(avail.start),
           end: new Date(avail.end),
           status: avail.status,
         }))
-      );
+        .filter(event => isValidDate(event.start) && isValidDate(event.end));
+
+      setEvents(validEvents);
     } catch (error) {
       console.error('Error fetching availability:', error);
       setError('Failed to fetch availability. Please try refreshing the page.');
@@ -597,7 +618,17 @@ export default function AvailabilityCalendar() {
         ? response.data
         : response.data.results || response.data.bookings || [];
 
-      setBookings(bookingsArray);
+      const validBookings = bookingsArray
+        .map(booking => ({
+          id: booking.id,
+          title: `Booked with ${booking.client_email || 'client'}`,
+          start: new Date(booking.start),
+          end: new Date(booking.end),
+          status: 'booked',
+        }))
+        .filter(booking => isValidDate(booking.start) && isValidDate(booking.end));
+
+      setBookings(validBookings);
     } catch (error) {
       console.error('Error fetching bookings:', error);
     }
@@ -610,8 +641,13 @@ export default function AvailabilityCalendar() {
 
   const handleSelectSlot = useCallback(({ start, end }) => {
     const slotStart = new Date(start);
-    const slotEnd = new Date(slotStart.getTime() + 45 * 60 * 1000);
-    setSelectedSlot({ start: slotStart, end: slotEnd });
+    const slotEnd = end ? new Date(end) : new Date(slotStart.getTime() + 45 * 60 * 1000);
+    
+    if (isValidDate(slotStart) && isValidDate(slotEnd)) {
+      setSelectedSlot({ start: slotStart, end: slotEnd });
+    } else {
+      setError('Invalid time slot selected');
+    }
   }, []);
 
   const handleConfirmAction = async () => {
@@ -625,7 +661,6 @@ export default function AvailabilityCalendar() {
         status: actionType,
       });
 
-      // Update local state
       setEvents(prev => [
         ...prev.filter(e => 
           !(e.start.getTime() === selectedSlot.start.getTime() && 
@@ -677,7 +712,7 @@ export default function AvailabilityCalendar() {
     return {
       style: {
         ...baseStyle,
-        ...statusStyles[event.status] || { background: '#8B5CF6' },
+        ...(statusStyles[event.status] || { background: '#8B5CF6' }),
       },
     };
   };
@@ -695,7 +730,6 @@ export default function AvailabilityCalendar() {
     );
   }
 
-  // Custom calendar styling
   const calendarStyle = `
     .rbc-calendar {
       background: white;
@@ -807,40 +841,32 @@ export default function AvailabilityCalendar() {
             </div>
           </div>
           
-          <div className="flex space-x-2">
-            <button
-              onClick={() => {
-                if (selectedSlot) {
+          {selectedSlot && (
+            <div className="flex space-x-2">
+              <button
+                onClick={() => {
                   setActionType('available');
                   setIsConfirmOpen(true);
-                }
-              }}
-              disabled={!selectedSlot}
-              className={`px-4 py-2 rounded-md text-sm font-medium ${selectedSlot ? 
-                'bg-green-600 text-white hover:bg-green-700' : 
-                'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
-            >
-              Mark Available
-            </button>
-            <button
-              onClick={() => {
-                if (selectedSlot) {
+                }}
+                className="px-4 py-2 rounded-md text-sm font-medium bg-green-600 text-white hover:bg-green-700"
+              >
+                Mark Available
+              </button>
+              <button
+                onClick={() => {
                   setActionType('unavailable');
                   setIsConfirmOpen(true);
-                }
-              }}
-              disabled={!selectedSlot}
-              className={`px-4 py-2 rounded-md text-sm font-medium ${selectedSlot ? 
-                'bg-gray-600 text-white hover:bg-gray-700' : 
-                'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
-            >
-              Mark Unavailable
-            </button>
-          </div>
+                }}
+                className="px-4 py-2 rounded-md text-sm font-medium bg-gray-600 text-white hover:bg-gray-700"
+              >
+                Mark Unavailable
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Selected Slot Info */}
-        {selectedSlot && (
+        {selectedSlot && isValidDate(selectedSlot.start) && isValidDate(selectedSlot.end) && (
           <div className="mb-4 bg-blue-50 border border-blue-200 rounded-md p-3">
             <div className="flex items-center">
               <svg className="h-5 w-5 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -856,116 +882,115 @@ export default function AvailabilityCalendar() {
         {/* Calendar */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div style={{ height: '70vh' }}>
-            <Calendar
-              localizer={localizer}
-              events={[
-                ...events,
-                ...bookings.map(booking => ({
-                  id: booking.id,
-                  title: `Booked with ${booking.client_email || 'client'}`,
-                  start: new Date(booking.start),
-                  end: new Date(booking.end),
-                  status: 'booked',
-                }))
-              ]}
-              startAccessor="start"
-              endAccessor="end"
-              defaultView={Views.WEEK}
-              view={currentView}
-              onView={setCurrentView}
-              selectable
-              onSelectSlot={handleSelectSlot}
-              onSelectEvent={(event) => {
-                if (event.status !== 'booked') {
-                  setSelectedSlot({
-                    start: event.start,
-                    end: event.end,
-                    status: event.status,
-                  });
-                }
-              }}
-              eventPropGetter={eventStyleGetter}
-              step={15}
-              timeslots={2}
-              min={new Date(0, 0, 0, 8, 0, 0)} // 8 AM
-              max={new Date(0, 0, 0, 20, 0, 0)} // 8 PM
-            />
+            <ErrorBoundary FallbackComponent={CalendarErrorFallback}>
+              <Calendar
+                localizer={localizer}
+                events={[...events, ...bookings]}
+                startAccessor="start"
+                endAccessor="end"
+                defaultView={Views.WEEK}
+                view={currentView}
+                onView={setCurrentView}
+                selectable
+                onSelectSlot={handleSelectSlot}
+                onSelectEvent={(event) => {
+                  if (event.status !== 'booked') {
+                    setSelectedSlot({
+                      start: event.start,
+                      end: event.end,
+                      status: event.status,
+                    });
+                  }
+                }}
+                eventPropGetter={eventStyleGetter}
+                step={15}
+                timeslots={2}
+                min={new Date(0, 0, 0, 8, 0, 0)} // 8 AM
+                max={new Date(0, 0, 0, 20, 0, 0)} // 8 PM
+              />
+            </ErrorBoundary>
           </div>
         </div>
       </div>
 
       {/* Confirmation Dialog */}
-      <Dialog
-        open={isConfirmOpen}
-        onClose={() => setIsConfirmOpen(false)}
-        className="fixed z-10 inset-0 overflow-y-auto"
-      >
-        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+      {isConfirmOpen && selectedSlot && (
+        <Dialog
+          open={isConfirmOpen}
+          onClose={() => setIsConfirmOpen(false)}
+          className="fixed z-10 inset-0 overflow-y-auto"
+        >
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 
-          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-            &#8203;
-          </span>
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+              &#8203;
+            </span>
 
-          <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-            <div>
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
-                <svg
-                  className="h-6 w-6 text-blue-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div className="mt-3 text-center sm:mt-5">
-                <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
-                  Confirm Availability
-                </Dialog.Title>
-                <div className="mt-2">
-                  <p className="text-sm text-gray-500">
-                    {actionType === 'available' ? (
-                      <>You're marking this time slot as available for appointments:</>
-                    ) : (
-                      <>You're marking this time slot as unavailable:</>
+            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+              <div>
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+                  <svg
+                    className="h-6 w-6 text-blue-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="mt-3 text-center sm:mt-5">
+                  <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
+                    Confirm Availability
+                  </Dialog.Title>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      {actionType === 'available' ? (
+                        <>You're marking this time slot as available for appointments:</>
+                      ) : (
+                        <>You're marking this time slot as unavailable:</>
+                      )}
+                    </p>
+                    {selectedSlot && isValidDate(selectedSlot.start) && (
+                      <p className="mt-2 font-medium text-gray-900">
+                        {format(selectedSlot.start, 'EEEE, MMMM d, yyyy')}
+                      </p>
                     )}
-                  </p>
-                  <p className="mt-2 font-medium text-gray-900">
-                    {selectedSlot && format(selectedSlot.start, 'EEEE, MMMM d, yyyy')}
-                  </p>
-                  <p className="text-gray-600">
-                    {selectedSlot && `${format(selectedSlot.start, 'h:mm a')} - ${format(selectedSlot.end, 'h:mm a')}`}
-                  </p>
+                    {selectedSlot && isValidDate(selectedSlot.start) && isValidDate(selectedSlot.end) && (
+                      <p className="text-gray-600">
+                        {format(selectedSlot.start, 'h:mm a')} - {format(selectedSlot.end, 'h:mm a')}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-              <button
-                type="button"
-                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
-                onClick={handleConfirmAction}
-                disabled={loading}
-              >
-                {loading ? 'Processing...' : 'Confirm'}
-              </button>
-              <button
-                type="button"
-                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                onClick={() => setIsConfirmOpen(false)}
-                disabled={loading}
-              >
-                Cancel
-              </button>
+              <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                  onClick={handleConfirmAction}
+                  disabled={loading}
+                >
+                  {loading ? 'Processing...' : 'Confirm'}
+                </button>
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                  onClick={() => setIsConfirmOpen(false)}
+                  disabled={loading}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </Dialog>
+        </Dialog>
+      )}
     </div>
   );
 }
