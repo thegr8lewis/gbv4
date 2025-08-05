@@ -233,7 +233,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Lottie from 'react-lottie-player';
-import psychologistLogin from '../assets/psychologistLogin.json';
+import psychologistLogin from '/src/assets/animations/psychologistLogin.json';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://safespacekenya.onrender.com/api';
