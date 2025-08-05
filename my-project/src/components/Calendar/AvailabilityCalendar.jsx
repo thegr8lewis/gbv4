@@ -1,3 +1,4 @@
+
 // // src/components/Calendar/AvailabilityCalendar.jsx
 // import { useState, useCallback, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
@@ -29,6 +30,7 @@
 //   const [bookings, setBookings] = useState([]);
 //   const [loading, setLoading] = useState(true);
 //   const [error, setError] = useState(null);
+//   const [currentView, setCurrentView] = useState(Views.WEEK);
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
@@ -96,7 +98,10 @@
 //   }, []);
 
 //   const handleSelectSlot = useCallback(({ start, end }) => {
-//     setSelectedSlot({ start, end });
+//     // Always create 45-minute slots
+//     const slotStart = new Date(start);
+//     const slotEnd = new Date(slotStart.getTime() + 45 * 60 * 1000); // Add 45 minutes
+//     setSelectedSlot({ start: slotStart, end: slotEnd });
 //   }, []);
 
 //   const handleSaveSlot = async (status) => {
@@ -170,21 +175,47 @@
 //   };
 
 //   const eventStyleGetter = (event) => {
-//     let backgroundColor = '#3174ad';
-//     if (event.status === 'available') backgroundColor = '#2ecc71';
-//     else if (event.status === 'booked') backgroundColor = '#e74c3c';
-//     else if (event.status === 'unavailable') backgroundColor = '#95a5a6';
-
-//     return {
-//       style: {
-//         backgroundColor,
-//         borderRadius: '4px',
-//         opacity: 0.8,
-//         color: 'white',
-//         border: '0px',
-//         display: 'block',
-//       },
+//     const baseStyle = {
+//       borderRadius: '8px',
+//       border: 'none',
+//       color: 'white',
+//       fontSize: '12px',
+//       fontWeight: '500',
+//       padding: '2px 6px',
+//       boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+//       transition: 'all 0.2s ease',
 //     };
+
+//     switch (event.status) {
+//       case 'available':
+//         return {
+//           style: {
+//             ...baseStyle,
+//             background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+//           },
+//         };
+//       case 'booked':
+//         return {
+//           style: {
+//             ...baseStyle,
+//             background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+//           },
+//         };
+//       case 'unavailable':
+//         return {
+//           style: {
+//             ...baseStyle,
+//             background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+//           },
+//         };
+//       default:
+//         return {
+//           style: {
+//             ...baseStyle,
+//             background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+//           },
+//         };
+//     }
 //   };
 
 //   const handleRetry = () => {
@@ -194,123 +225,296 @@
 
 //   if (loading) {
 //     return (
-//       <div className="p-4">
-//         <div className="flex items-center justify-center h-64">
-//           <div className="text-lg">Loading...</div>
+//       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+//         <div className="flex items-center justify-center h-screen">
+//           <div className="flex flex-col items-center space-y-4">
+//             <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+//             <div className="text-lg font-medium text-slate-600">Loading calendar...</div>
+//           </div>
 //         </div>
 //       </div>
 //     );
 //   }
 
-//   return (
-//     <div className="p-4">
-//       <div className="mb-6">
-//         <h2 className="text-2xl font-bold">Availability Calendar</h2>
-//         <p className="text-gray-600">Click or drag to mark availability slots</p>
-//       </div>
+//   const calendarStyle = `
+//     .rbc-calendar {
+//       background: white;
+//       border-radius: 16px;
+//       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+//       border: 1px solid #e2e8f0;
+//       overflow: hidden;
+//     }
+//     .rbc-header {
+//       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+//       color: white;
+//       font-weight: 600;
+//       padding: 12px 8px;
+//       border: none;
+//       font-size: 14px;
+//     }
+//     .rbc-today {
+//       background-color: #f8fafc;
+//     }
+//     .rbc-time-view {
+//       border: none;
+//     }
+//     .rbc-time-header {
+//       border-bottom: 2px solid #e2e8f0;
+//     }
+//     .rbc-timeslot-group {
+//       border-bottom: 1px solid #f1f5f9;
+//     }
+//     .rbc-time-slot {
+//       border-top: 1px solid #f8fafc;
+//     }
+//     .rbc-current-time-indicator {
+//       background-color: #ef4444;
+//       height: 2px;
+//     }
+//     .rbc-toolbar {
+//       background: white;
+//       padding: 20px;
+//       border-bottom: 1px solid #e2e8f0;
+//       margin-bottom: 0;
+//     }
+//     .rbc-btn-group button {
+//       background: white;
+//       border: 1px solid #d1d5db;
+//       color: #374151;
+//       padding: 8px 16px;
+//       font-weight: 500;
+//       transition: all 0.2s ease;
+//     }
+//     .rbc-btn-group button:hover {
+//       background: #f3f4f6;
+//       border-color: #9ca3af;
+//     }
+//     .rbc-btn-group button.rbc-active {
+//       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+//       border-color: #667eea;
+//       color: white;
+//     }
+//     .rbc-toolbar-label {
+//       font-size: 24px;
+//       font-weight: 700;
+//       color: #1f2937;
+//     }
+//     .rbc-event {
+//       border-radius: 8px !important;
+//       border: none !important;
+//     }
+//     .rbc-event:hover {
+//       transform: translateY(-1px);
+//       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+//     }
+//     .rbc-day-slot .rbc-events-container {
+//       margin-right: 0;
+//     }
+//     .rbc-time-content {
+//       border-top: none;
+//     }
+//     .rbc-time-gutter {
+//       background: #f8fafc;
+//       border-right: 1px solid #e2e8f0;
+//     }
+//     .rbc-time-gutter .rbc-timeslot-group {
+//       border-bottom: 1px solid #e2e8f0;
+//     }
+//   `;
 
-//       {error && (
-//         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+//       <style dangerouslySetInnerHTML={{ __html: calendarStyle }} />
+      
+//       <div className="max-w-7xl mx-auto p-6 space-y-6">
+//         {/* Header Section */}
+//         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
 //           <div className="flex items-center justify-between">
-//             <p className="text-red-700">{error}</p>
+//             <div>
+//               <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+//                 Availability Calendar
+//               </h1>
+//               <p className="text-slate-500 mt-2 text-lg">
+//                 Manage your schedule with precision and style
+//               </p>
+//             </div>
+//             <div className="flex items-center space-x-3">
+//               <div className="flex items-center space-x-2 text-sm text-slate-600">
+//                 <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-green-600"></div>
+//                 <span>Available</span>
+//               </div>
+//               <div className="flex items-center space-x-2 text-sm text-slate-600">
+//                 <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-blue-600"></div>
+//                 <span>Booked</span>
+//               </div>
+//               <div className="flex items-center space-x-2 text-sm text-slate-600">
+//                 <div className="w-3 h-3 rounded-full bg-gradient-to-r from-gray-400 to-gray-600"></div>
+//                 <span>Unavailable</span>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Error Display */}
+//         {error && (
+//           <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-lg">
+//             <div className="flex items-center justify-between">
+//               <div className="flex items-center space-x-3">
+//                 <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+//                   <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+//                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+//                   </svg>
+//                 </div>
+//                 <p className="text-red-800 font-medium">{error}</p>
+//               </div>
+//               <button
+//                 onClick={handleRetry}
+//                 className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-medium transition-colors duration-200"
+//               >
+//                 Retry
+//               </button>
+//             </div>
+//           </div>
+//         )}
+
+//         {/* Action Buttons */}
+//         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6">
+//           <div className="flex flex-wrap gap-4 items-center justify-between">
+//             <div className="flex flex-wrap gap-3">
+//               <button
+//                 onClick={() => handleSaveSlot('available')}
+//                 disabled={!selectedSlot}
+//                 className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
+//                   selectedSlot
+//                     ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+//                     : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+//                 }`}
+//               >
+//                 <span className="flex items-center space-x-2">
+//                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+//                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+//                   </svg>
+//                   <span>Mark Available</span>
+//                 </span>
+//               </button>
+              
+//               <button
+//                 onClick={() => handleSaveSlot('unavailable')}
+//                 disabled={!selectedSlot}
+//                 className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
+//                   selectedSlot
+//                     ? 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+//                     : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+//                 }`}
+//               >
+//                 <span className="flex items-center space-x-2">
+//                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+//                     <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+//                   </svg>
+//                   <span>Mark Unavailable</span>
+//                 </span>
+//               </button>
+//             </div>
+
 //             <button
-//               onClick={handleRetry}
-//               className="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded text-sm"
+//               onClick={() => setShowMap(!showMap)}
+//               className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
 //             >
-//               Retry
+//               <span className="flex items-center space-x-2">
+//                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+//                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+//                 </svg>
+//                 <span>{showMap ? 'Hide Map' : 'Show Map'}</span>
+//               </span>
 //             </button>
 //           </div>
 //         </div>
-//       )}
 
-//       <div className="flex space-x-4 mb-4">
-//         <button
-//           onClick={() => handleSaveSlot('available')}
-//           disabled={!selectedSlot}
-//           className={`px-4 py-2 rounded ${
-//             selectedSlot
-//               ? 'bg-green-500 hover:bg-green-600 text-white'
-//               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-//           }`}
-//         >
-//           Mark as Available
-//         </button>
-//         <button
-//           onClick={() => handleSaveSlot('unavailable')}
-//           disabled={!selectedSlot}
-//           className={`px-4 py-2 rounded ${
-//             selectedSlot
-//               ? 'bg-gray-500 hover:bg-gray-600 text-white'
-//               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-//           }`}
-//         >
-//           Mark as Unavailable
-//         </button>
-//         <button
-//           onClick={() => setShowMap(!showMap)}
-//           className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
-//         >
-//           {showMap ? 'Hide Map' : 'Show Map'}
-//         </button>
-//       </div>
+//         {/* Selected Slot Info */}
+//         {selectedSlot && (
+//           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 shadow-lg">
+//             <div className="flex items-center space-x-4">
+//               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+//                 <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+//                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+//                 </svg>
+//               </div>
+//               <div>
+//                 <h3 className="text-lg font-semibold text-slate-800">Selected Time Slot</h3>
+//                 <p className="text-blue-700 font-medium">
+//                   {format(selectedSlot.start, 'PPp')} - {format(selectedSlot.end, 'p')}
+//                 </p>
+//                 <p className="text-sm text-slate-600">
+//                   Status: {selectedSlot.status ? selectedSlot.status.charAt(0).toUpperCase() + selectedSlot.status.slice(1) : 'Not Set'}
+//                 </p>
+//               </div>
+//             </div>
+//           </div>
+//         )}
 
-//       {selectedSlot && (
-//         <div className="mb-4 p-3 bg-blue-50 rounded">
-//           <p>
-//             Selected slot: {format(selectedSlot.start, 'PPp')} -{' '}
-//             {format(selectedSlot.end, 'p')}
-//           </p>
-//           <p>Status: {selectedSlot.status || 'Not Set'}</p>
+//         {/* Map Section */}
+//         {showMap && (
+//           <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+//             <div className="p-6 border-b border-slate-200">
+//               <h3 className="text-xl font-semibold text-slate-800">Location Overview</h3>
+//               <p className="text-slate-600 mt-1">Your service area and coverage map</p>
+//             </div>
+//             <div className="h-80">
+//               <iframe
+//                 width="100%"
+//                 height="100%"
+//                 frameBorder="0"
+//                 style={{ border: 0 }}
+//                 src={`https://www.google.com/maps/embed/v1/view?key=${
+//                   import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+//                 }&center=0,0&zoom=2`}
+//                 allowFullScreen
+//               ></iframe>
+//             </div>
+//           </div>
+//         )}
+
+//         {/* Calendar Section */}
+//         <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+//           <div style={{ height: 800 }}>
+//             <Calendar
+//               localizer={localizer}
+//               events={[
+//                 ...events,
+//                 ...(Array.isArray(bookings)
+//                   ? bookings.map((booking) => ({
+//                       title: `Booked with ${booking.client_email || 'client'}`,
+//                       start: new Date(booking.start),
+//                       end: new Date(booking.end),
+//                       status: 'booked',
+//                     }))
+//                   : []),
+//               ]}
+//               startAccessor="start"
+//               endAccessor="end"
+//               defaultView={Views.WEEK}
+//               view={currentView}
+//               onView={setCurrentView}
+//               selectable
+//               onSelectSlot={handleSelectSlot}
+//               onSelectEvent={(event) => {
+//                 if (event.status !== 'booked') {
+//                   setSelectedSlot({
+//                     start: event.start,
+//                     end: event.end,
+//                     status: event.status,
+//                   });
+//                 }
+//               }}
+//               eventPropGetter={eventStyleGetter}
+//               step={45}
+//               timeslots={1}
+//               popup
+//               showMultiDayTimes
+//               resizable
+//             />
+//           </div>
 //         </div>
-//       )}
-
-//       {showMap && (
-//         <div className="mb-6 h-64 bg-gray-100 rounded-lg overflow-hidden">
-//           <iframe
-//             width="100%"
-//             height="100%"
-//             frameBorder="0"
-//             style={{ border: 0 }}
-//             src={`https://www.google.com/maps/embed/v1/view?key=${
-//               import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-//             }&center=0,0&zoom=2`}
-//             allowFullScreen
-//           ></iframe>
-//         </div>
-//       )}
-
-//       <div style={{ height: 700 }}>
-//         <Calendar
-//           localizer={localizer}
-//           events={[
-//             ...events,
-//             ...(Array.isArray(bookings)
-//               ? bookings.map((booking) => ({
-//                   title: `Booked with ${booking.client_email || 'client'}`,
-//                   start: new Date(booking.start),
-//                   end: new Date(booking.end),
-//                   status: 'booked',
-//                 }))
-//               : []),
-//           ]}
-//           startAccessor="start"
-//           endAccessor="end"
-//           defaultView={Views.WEEK}
-//           selectable
-//           onSelectSlot={handleSelectSlot}
-//           onSelectEvent={(event) => {
-//             if (event.status !== 'booked') {
-//               setSelectedSlot({
-//                 start: event.start,
-//                 end: event.end,
-//                 status: event.status,
-//               });
-//             }
-//           }}
-//           eventPropGetter={eventStyleGetter}
-//           step={15}
-//           timeslots={4}
-//         />
 //       </div>
 //     </div>
 //   );
@@ -327,6 +531,7 @@ import getDay from 'date-fns/getDay';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import enUS from 'date-fns/locale/en-US';
 import api from '../../utils/api';
+import { Dialog } from '@headlessui/react';
 
 const locales = {
   'en-US': enUS,
@@ -343,11 +548,12 @@ const localizer = dateFnsLocalizer({
 export default function AvailabilityCalendar() {
   const [events, setEvents] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [showMap, setShowMap] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentView, setCurrentView] = useState(Views.WEEK);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [actionType, setActionType] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -367,12 +573,9 @@ export default function AvailabilityCalendar() {
         ? response.data
         : response.data.results || response.data.availabilities || [];
 
-      if (!Array.isArray(availabilityArray)) {
-        throw new Error('Expected array but got ' + typeof availabilityArray);
-      }
-
       setEvents(
         availabilityArray.map((avail) => ({
+          id: avail.id,
           title: avail.status === 'available' ? 'Available' : 'Unavailable',
           start: new Date(avail.start),
           end: new Date(avail.end),
@@ -389,23 +592,14 @@ export default function AvailabilityCalendar() {
 
   const fetchBookings = async () => {
     try {
-      setError(null);
-      setLoading(true);
       const response = await api.get('/bookings/upcoming/');
       const bookingsArray = Array.isArray(response.data)
         ? response.data
         : response.data.results || response.data.bookings || [];
 
-      if (!Array.isArray(bookingsArray)) {
-        throw new Error('Expected array but got ' + typeof bookingsArray);
-      }
-
       setBookings(bookingsArray);
     } catch (error) {
       console.error('Error fetching bookings:', error);
-      setError('Failed to fetch bookings. Please try refreshing the page.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -415,24 +609,39 @@ export default function AvailabilityCalendar() {
   }, []);
 
   const handleSelectSlot = useCallback(({ start, end }) => {
-    // Always create 45-minute slots
     const slotStart = new Date(start);
-    const slotEnd = new Date(slotStart.getTime() + 45 * 60 * 1000); // Add 45 minutes
+    const slotEnd = new Date(slotStart.getTime() + 45 * 60 * 1000);
     setSelectedSlot({ start: slotStart, end: slotEnd });
   }, []);
 
-  const handleSaveSlot = async (status) => {
-    if (!selectedSlot) return;
+  const handleConfirmAction = async () => {
+    if (!selectedSlot || !actionType) return;
 
     try {
-      setError(null);
       setLoading(true);
-      const response = await api.get('/availabilities/');
-      const existingAvailabilities = Array.isArray(response.data)
-        ? response.data
-        : response.data.results || response.data.availabilities || [];
+      await api.post('/availabilities/', {
+        start: selectedSlot.start.toISOString(),
+        end: selectedSlot.end.toISOString(),
+        status: actionType,
+      });
 
-      await updateAvailability(existingAvailabilities, status);
+      // Update local state
+      setEvents(prev => [
+        ...prev.filter(e => 
+          !(e.start.getTime() === selectedSlot.start.getTime() && 
+            e.end.getTime() === selectedSlot.end.getTime())
+        ),
+        {
+          id: Date.now().toString(),
+          title: actionType === 'available' ? 'Available' : 'Unavailable',
+          start: selectedSlot.start,
+          end: selectedSlot.end,
+          status: actionType,
+        }
+      ]);
+
+      setIsConfirmOpen(false);
+      setSelectedSlot(null);
     } catch (error) {
       console.error('Error updating availability:', error);
       setError('Failed to update availability. Please try again.');
@@ -441,98 +650,36 @@ export default function AvailabilityCalendar() {
     }
   };
 
-  const updateAvailability = async (existingAvailabilities, status) => {
-    const updatedAvailabilities = existingAvailabilities
-      .filter(
-        (avail) =>
-          !(
-            new Date(avail.start).getTime() === new Date(selectedSlot.start).getTime() &&
-            new Date(avail.end).getTime() === new Date(selectedSlot.end).getTime()
-          )
-      )
-      .map((avail) => ({
-        start: avail.start,
-        end: avail.end,
-        status: avail.status,
-      }));
-
-    updatedAvailabilities.push({
-      start: selectedSlot.start.toISOString(),
-      end: selectedSlot.end.toISOString(),
-      status,
-    });
-
-    const response = await api.post('/availabilities/bulk/', {
-      availabilities: updatedAvailabilities,
-    });
-
-    if (response.status >= 200 && response.status < 300) {
-      const newEvent = {
-        title: status === 'available' ? 'Available' : 'Unavailable',
-        start: selectedSlot.start,
-        end: selectedSlot.end,
-        status,
-      };
-
-      setEvents((prevEvents) => [
-        ...prevEvents.filter(
-          (event) =>
-            !(
-              event.start.getTime() === selectedSlot.start.getTime() &&
-              event.end.getTime() === selectedSlot.end.getTime()
-            )
-        ),
-        newEvent,
-      ]);
-
-      setSelectedSlot(null);
-    } else {
-      throw new Error('Failed to update availability');
-    }
-  };
-
   const eventStyleGetter = (event) => {
     const baseStyle = {
-      borderRadius: '8px',
+      borderRadius: '4px',
       border: 'none',
       color: 'white',
       fontSize: '12px',
-      fontWeight: '500',
-      padding: '2px 6px',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      transition: 'all 0.2s ease',
+      padding: '2px 5px',
     };
 
-    switch (event.status) {
-      case 'available':
-        return {
-          style: {
-            ...baseStyle,
-            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-          },
-        };
-      case 'booked':
-        return {
-          style: {
-            ...baseStyle,
-            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-          },
-        };
-      case 'unavailable':
-        return {
-          style: {
-            ...baseStyle,
-            background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
-          },
-        };
-      default:
-        return {
-          style: {
-            ...baseStyle,
-            background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-          },
-        };
-    }
+    const statusStyles = {
+      available: {
+        background: '#10B981',
+        borderLeft: '3px solid #059669',
+      },
+      booked: {
+        background: '#3B82F6',
+        borderLeft: '3px solid #1D4ED8',
+      },
+      unavailable: {
+        background: '#6B7280',
+        borderLeft: '3px solid #4B5563',
+      },
+    };
+
+    return {
+      style: {
+        ...baseStyle,
+        ...statusStyles[event.status] || { background: '#8B5CF6' },
+      },
+    };
   };
 
   const handleRetry = () => {
@@ -542,270 +689,184 @@ export default function AvailabilityCalendar() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-        <div className="flex items-center justify-center h-screen">
-          <div className="flex flex-col items-center space-y-4">
-            <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-            <div className="text-lg font-medium text-slate-600">Loading calendar...</div>
-          </div>
-        </div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
+  // Custom calendar styling
   const calendarStyle = `
     .rbc-calendar {
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      border-radius: 0.5rem;
       border: 1px solid #e2e8f0;
-      overflow: hidden;
     }
     .rbc-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      font-weight: 600;
-      padding: 12px 8px;
-      border: none;
-      font-size: 14px;
+      padding: 0.75rem;
+      font-weight: 500;
+      color: #4a5568;
+      border-bottom: 1px solid #e2e8f0;
     }
     .rbc-today {
       background-color: #f8fafc;
     }
-    .rbc-time-view {
-      border: none;
-    }
     .rbc-time-header {
-      border-bottom: 2px solid #e2e8f0;
-    }
-    .rbc-timeslot-group {
-      border-bottom: 1px solid #f1f5f9;
-    }
-    .rbc-time-slot {
-      border-top: 1px solid #f8fafc;
-    }
-    .rbc-current-time-indicator {
-      background-color: #ef4444;
-      height: 2px;
-    }
-    .rbc-toolbar {
-      background: white;
-      padding: 20px;
       border-bottom: 1px solid #e2e8f0;
-      margin-bottom: 0;
-    }
-    .rbc-btn-group button {
-      background: white;
-      border: 1px solid #d1d5db;
-      color: #374151;
-      padding: 8px 16px;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-    .rbc-btn-group button:hover {
-      background: #f3f4f6;
-      border-color: #9ca3af;
-    }
-    .rbc-btn-group button.rbc-active {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-color: #667eea;
-      color: white;
-    }
-    .rbc-toolbar-label {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1f2937;
-    }
-    .rbc-event {
-      border-radius: 8px !important;
-      border: none !important;
-    }
-    .rbc-event:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .rbc-day-slot .rbc-events-container {
-      margin-right: 0;
     }
     .rbc-time-content {
       border-top: none;
     }
     .rbc-time-gutter {
-      background: #f8fafc;
-      border-right: 1px solid #e2e8f0;
+      color: #718096;
+      font-size: 0.875rem;
     }
-    .rbc-time-gutter .rbc-timeslot-group {
-      border-bottom: 1px solid #e2e8f0;
+    .rbc-time-slot {
+      color: #718096;
+      font-size: 0.75rem;
+    }
+    .rbc-toolbar {
+      padding: 1rem;
+      margin-bottom: 0;
+    }
+    .rbc-btn-group button {
+      border: 1px solid #e2e8f0;
+      color: #4a5568;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+    .rbc-btn-group button.rbc-active {
+      background: #f1f5f9;
+      color: #1e40af;
+      font-weight: 500;
+    }
+    .rbc-toolbar-label {
+      font-weight: 600;
+      color: #1a202c;
+    }
+    .rbc-event {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .rbc-event:hover {
+      opacity: 0.9;
+    }
+    .rbc-current-time-indicator {
+      background-color: #ef4444;
+      height: 2px;
     }
   `;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gray-50">
       <style dangerouslySetInnerHTML={{ __html: calendarStyle }} />
       
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
-        {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-                Availability Calendar
-              </h1>
-              <p className="text-slate-500 mt-2 text-lg">
-                Manage your schedule with precision and style
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2 text-sm text-slate-600">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-green-600"></div>
-                <span>Available</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-slate-600">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-blue-600"></div>
-                <span>Booked</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-slate-600">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-gray-400 to-gray-600"></div>
-                <span>Unavailable</span>
-              </div>
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">Availability Calendar</h1>
+          <p className="mt-1 text-gray-600">Manage your professional schedule</p>
         </div>
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-lg">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <p className="text-red-800 font-medium">{error}</p>
+          <div className="mb-6 bg-red-50 border-l-4 border-red-400 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
               </div>
-              <button
-                onClick={handleRetry}
-                className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-medium transition-colors duration-200"
-              >
-                Retry
-              </button>
+              <div className="ml-3">
+                <p className="text-sm text-red-700">{error}</p>
+                <button
+                  onClick={handleRetry}
+                  className="mt-2 text-sm font-medium text-red-600 hover:text-red-500"
+                >
+                  Retry
+                </button>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Action Buttons */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6">
-          <div className="flex flex-wrap gap-4 items-center justify-between">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => handleSaveSlot('available')}
-                disabled={!selectedSlot}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
-                  selectedSlot
-                    ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                <span className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Mark Available</span>
-                </span>
-              </button>
-              
-              <button
-                onClick={() => handleSaveSlot('unavailable')}
-                disabled={!selectedSlot}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
-                  selectedSlot
-                    ? 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                <span className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                  <span>Mark Unavailable</span>
-                </span>
-              </button>
+        {/* Calendar Controls */}
+        <div className="mb-4 flex justify-between items-center">
+          <div className="flex space-x-2">
+            <div className="flex items-center">
+              <span className="inline-block w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+              <span className="text-sm text-gray-600">Available</span>
             </div>
-
+            <div className="flex items-center">
+              <span className="inline-block w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+              <span className="text-sm text-gray-600">Booked</span>
+            </div>
+            <div className="flex items-center">
+              <span className="inline-block w-3 h-3 rounded-full bg-gray-500 mr-2"></span>
+              <span className="text-sm text-gray-600">Unavailable</span>
+            </div>
+          </div>
+          
+          <div className="flex space-x-2">
             <button
-              onClick={() => setShowMap(!showMap)}
-              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+              onClick={() => {
+                if (selectedSlot) {
+                  setActionType('available');
+                  setIsConfirmOpen(true);
+                }
+              }}
+              disabled={!selectedSlot}
+              className={`px-4 py-2 rounded-md text-sm font-medium ${selectedSlot ? 
+                'bg-green-600 text-white hover:bg-green-700' : 
+                'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
             >
-              <span className="flex items-center space-x-2">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                </svg>
-                <span>{showMap ? 'Hide Map' : 'Show Map'}</span>
-              </span>
+              Mark Available
+            </button>
+            <button
+              onClick={() => {
+                if (selectedSlot) {
+                  setActionType('unavailable');
+                  setIsConfirmOpen(true);
+                }
+              }}
+              disabled={!selectedSlot}
+              className={`px-4 py-2 rounded-md text-sm font-medium ${selectedSlot ? 
+                'bg-gray-600 text-white hover:bg-gray-700' : 
+                'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+            >
+              Mark Unavailable
             </button>
           </div>
         </div>
 
         {/* Selected Slot Info */}
         {selectedSlot && (
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 shadow-lg">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-slate-800">Selected Time Slot</h3>
-                <p className="text-blue-700 font-medium">
-                  {format(selectedSlot.start, 'PPp')} - {format(selectedSlot.end, 'p')}
-                </p>
-                <p className="text-sm text-slate-600">
-                  Status: {selectedSlot.status ? selectedSlot.status.charAt(0).toUpperCase() + selectedSlot.status.slice(1) : 'Not Set'}
-                </p>
-              </div>
+          <div className="mb-4 bg-blue-50 border border-blue-200 rounded-md p-3">
+            <div className="flex items-center">
+              <svg className="h-5 w-5 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-medium text-blue-800">
+                Selected: {format(selectedSlot.start, 'MMM d, yyyy h:mm a')} - {format(selectedSlot.end, 'h:mm a')}
+              </span>
             </div>
           </div>
         )}
 
-        {/* Map Section */}
-        {showMap && (
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-            <div className="p-6 border-b border-slate-200">
-              <h3 className="text-xl font-semibold text-slate-800">Location Overview</h3>
-              <p className="text-slate-600 mt-1">Your service area and coverage map</p>
-            </div>
-            <div className="h-80">
-              <iframe
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                style={{ border: 0 }}
-                src={`https://www.google.com/maps/embed/v1/view?key=${
-                  import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-                }&center=0,0&zoom=2`}
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
-        )}
-
-        {/* Calendar Section */}
-        <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
-          <div style={{ height: 800 }}>
+        {/* Calendar */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div style={{ height: '70vh' }}>
             <Calendar
               localizer={localizer}
               events={[
                 ...events,
-                ...(Array.isArray(bookings)
-                  ? bookings.map((booking) => ({
-                      title: `Booked with ${booking.client_email || 'client'}`,
-                      start: new Date(booking.start),
-                      end: new Date(booking.end),
-                      status: 'booked',
-                    }))
-                  : []),
+                ...bookings.map(booking => ({
+                  id: booking.id,
+                  title: `Booked with ${booking.client_email || 'client'}`,
+                  start: new Date(booking.start),
+                  end: new Date(booking.end),
+                  status: 'booked',
+                }))
               ]}
               startAccessor="start"
               endAccessor="end"
@@ -824,15 +885,87 @@ export default function AvailabilityCalendar() {
                 }
               }}
               eventPropGetter={eventStyleGetter}
-              step={45}
-              timeslots={1}
-              popup
-              showMultiDayTimes
-              resizable
+              step={15}
+              timeslots={2}
+              min={new Date(0, 0, 0, 8, 0, 0)} // 8 AM
+              max={new Date(0, 0, 0, 20, 0, 0)} // 8 PM
             />
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        className="fixed z-10 inset-0 overflow-y-auto"
+      >
+        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+
+          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+            &#8203;
+          </span>
+
+          <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div>
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+                <svg
+                  className="h-6 w-6 text-blue-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div className="mt-3 text-center sm:mt-5">
+                <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
+                  Confirm Availability
+                </Dialog.Title>
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500">
+                    {actionType === 'available' ? (
+                      <>You're marking this time slot as available for appointments:</>
+                    ) : (
+                      <>You're marking this time slot as unavailable:</>
+                    )}
+                  </p>
+                  <p className="mt-2 font-medium text-gray-900">
+                    {selectedSlot && format(selectedSlot.start, 'EEEE, MMMM d, yyyy')}
+                  </p>
+                  <p className="text-gray-600">
+                    {selectedSlot && `${format(selectedSlot.start, 'h:mm a')} - ${format(selectedSlot.end, 'h:mm a')}`}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+              <button
+                type="button"
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                onClick={handleConfirmAction}
+                disabled={loading}
+              >
+                {loading ? 'Processing...' : 'Confirm'}
+              </button>
+              <button
+                type="button"
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                onClick={() => setIsConfirmOpen(false)}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 }
