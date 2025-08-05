@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@date-io/date-fns": "^3.2.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fullcalendar/daygrid": "^6.1.18",
@@ -35,9 +36,10 @@
     "leaflet-routing-machine": "^3.2.12",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.488.0",
-    "react": "^19.0.0",
+    "react": "^19.1.1",
     "react-big-calendar": "^1.19.4",
-    "react-dom": "^19.0.0",
+    "react-dom": "^19.1.1",
+    "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.60.0",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^6.30.1",
