@@ -1,11 +1,10 @@
-// // src/components/Psychologists/PsychologistProfile.jsx
 // import { useState, useEffect } from 'react';
 // import { useParams, useNavigate } from 'react-router-dom';
 // import { User, Globe, Award, Calendar as CalendarIcon, Clock, Phone, Mail, ArrowLeft, CheckCircle, XCircle, Shield } from 'lucide-react';
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 // import { format, parseISO } from 'date-fns';
-// import api from '../../utils/api'; // Adjust path to your api.js
+// import api from '../../utils/api';
 
 // export default function PsychologistProfile() {
 //   const { id } = useParams();
@@ -18,7 +17,6 @@
 //   const [selectedSlot, setSelectedSlot] = useState(null);
 //   const [clientEmail, setClientEmail] = useState('');
 //   const [clientPhone, setClientPhone] = useState('');
-//   const [clientName, setClientName] = useState('');
 //   const [isBooking, setIsBooking] = useState(false);
 //   const [isRefreshingAvailability, setIsRefreshingAvailability] = useState(false);
 
@@ -76,24 +74,24 @@
 //   const handleBookAppointment = async (e) => {
 //     e.preventDefault();
 
-//     if (!clientEmail || !clientName) {
-//       toast.error('Name and email are required');
+//     if (!clientEmail) {
+//       toast.error('Email is required');
 //       return;
 //     }
 
 //     try {
 //       setIsBooking(true);
 
-//       await api.post(`/psychologists/${id}/bookings/`, {
-//         client_name: clientName,
-//         client_email: clientEmail,
-//         client_phone: clientPhone,
-//         availability_id: selectedSlot.id,
-//       });
+//      await api.post(`/psychologists/${id}/bookings/`, {
+//   client_email: clientEmail,
+//   client_phone: clientPhone,
+//   availability_id: selectedSlot.id,
+//   start: selectedSlot.start.toISOString(),
+//   end: selectedSlot.end.toISOString(),
+// });
 
 //       toast.success('Appointment booked successfully!');
 
-//       // Refresh availability
 //       setIsRefreshingAvailability(true);
 //       try {
 //         const updatedResponse = await api.get(`/psychologists/${id}/`);
@@ -184,7 +182,6 @@
 
 //   return (
 //     <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
-//       {/* Header */}
 //       <div className="flex items-center justify-between mb-4 sm:mb-8">
 //         <button
 //           onClick={() => navigate(-1)}
@@ -204,11 +201,8 @@
 //         <div className="w-8 sm:w-10"></div>
 //       </div>
 
-//       {/* Profile Content */}
 //       <div className="grid gap-4 sm:gap-8">
-//         {/* Profile Card */}
 //         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-6">
-//           {/* Profile Header */}
 //           <div className="flex items-start mb-3 sm:mb-6">
 //             <div className="w-12 h-12 sm:w-20 sm:h-20 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
 //               <span className="text-xl sm:text-3xl">{getGenderIcon(psychologist.gender)}</span>
@@ -227,7 +221,6 @@
 //             </div>
 //           </div>
 
-//           {/* Bio */}
 //           {psychologist.bio && (
 //             <div className="mb-4 sm:mb-6">
 //               <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">
@@ -239,7 +232,6 @@
 //             </div>
 //           )}
 
-//           {/* Specializations */}
 //           {psychologist.specializations && (
 //             <div className="mb-4 sm:mb-6">
 //               <div className="flex items-center space-x-1 sm:space-x-2 mb-2 sm:mb-3">
@@ -261,7 +253,6 @@
 //             </div>
 //           )}
 
-//           {/* Languages */}
 //           {psychologist.languages?.length > 0 && (
 //             <div className="mb-4 sm:mb-6">
 //               <div className="flex items-center space-x-1 sm:space-x-2 mb-2 sm:mb-3">
@@ -283,7 +274,6 @@
 //             </div>
 //           )}
 
-//           {/* Contact Info */}
 //           <div className="space-y-2 sm:space-y-3">
 //             <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 sm:mb-2">
 //               Contact Information
@@ -303,7 +293,6 @@
 //           </div>
 //         </div>
 
-//         {/* Availability Section */}
 //         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-6">
 //           <div className="flex items-center space-x-1 sm:space-x-2 mb-4 sm:mb-6">
 //             <CalendarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
@@ -339,7 +328,6 @@
 //                       setSelectedSlot(slot);
 //                       setClientEmail('');
 //                       setClientPhone('');
-//                       setClientName('');
 //                       setShowBookingForm(true);
 //                     }}
 //                   >
@@ -405,7 +393,6 @@
 //         </div>
 //       </div>
 
-//       {/* Booking Modal */}
 //       {showBookingForm && selectedSlot && (
 //         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50">
 //           <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 max-w-md w-full border border-gray-100">
@@ -428,20 +415,6 @@
 
 //             <form onSubmit={handleBookAppointment}>
 //               <div className="space-y-3 sm:space-y-4">
-//                 {/* <div>
-//                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-//                     Full Name *
-//                   </label>
-//                   <input
-//                     type="text"
-//                     required
-//                     className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
-//                     placeholder="Your full name"
-//                     value={clientName}
-//                     onChange={(e) => setClientName(e.target.value)}
-//                     disabled={isBooking}
-//                   />
-//                 </div> */}
 //                 <div>
 //                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
 //                     Email Address *
@@ -513,7 +486,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { User, Globe, Award, Calendar as CalendarIcon, Clock, Phone, Mail, ArrowLeft, CheckCircle, XCircle, Shield } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isAfter } from 'date-fns';
 import api from '../../utils/api';
 
 export default function PsychologistProfile() {
@@ -529,6 +502,7 @@ export default function PsychologistProfile() {
   const [clientPhone, setClientPhone] = useState('');
   const [isBooking, setIsBooking] = useState(false);
   const [isRefreshingAvailability, setIsRefreshingAvailability] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -540,14 +514,17 @@ export default function PsychologistProfile() {
         setPsychologist(response.data);
 
         if (response.data.availability) {
-          setAvailability(
-            response.data.availability.map((avail) => ({
+          const now = new Date();
+          const filteredAvailability = response.data.availability
+            .map((avail) => ({
               id: avail.id,
               start: parseISO(avail.start),
               end: parseISO(avail.end),
               status: avail.status,
             }))
-          );
+            .filter(slot => isAfter(slot.end, now)); // Filter out past slots
+
+          setAvailability(filteredAvailability);
         }
       } catch (err) {
         console.error('Error fetching psychologist data:', err);
@@ -591,37 +568,45 @@ export default function PsychologistProfile() {
 
     try {
       setIsBooking(true);
+      setBookingSuccess(false);
 
-     await api.post(`/psychologists/${id}/bookings/`, {
-  client_email: clientEmail,
-  client_phone: clientPhone,
-  availability_id: selectedSlot.id,
-  start: selectedSlot.start.toISOString(),
-  end: selectedSlot.end.toISOString(),
-});
+      await api.post(`/psychologists/${id}/bookings/`, {
+        client_email: clientEmail,
+        client_phone: clientPhone,
+        availability_id: selectedSlot.id,
+        start: selectedSlot.start.toISOString(),
+        end: selectedSlot.end.toISOString(),
+      });
 
-      toast.success('Appointment booked successfully!');
+      setBookingSuccess(true);
 
       setIsRefreshingAvailability(true);
       try {
         const updatedResponse = await api.get(`/psychologists/${id}/`);
         if (updatedResponse.data.availability) {
-          setAvailability(
-            updatedResponse.data.availability.map((avail) => ({
+          const now = new Date();
+          const filteredAvailability = updatedResponse.data.availability
+            .map((avail) => ({
               id: avail.id,
               start: parseISO(avail.start),
               end: parseISO(avail.end),
               status: avail.status,
             }))
-          );
+            .filter(slot => isAfter(slot.end, now));
+
+          setAvailability(filteredAvailability);
         }
       } finally {
         setIsRefreshingAvailability(false);
       }
 
-      setShowBookingForm(false);
-      setClientEmail('');
-      setClientPhone('');
+      // Clear form after successful booking
+      setTimeout(() => {
+        setShowBookingForm(false);
+        setClientEmail('');
+        setClientPhone('');
+        setBookingSuccess(false);
+      }, 2000);
     } catch (err) {
       console.error('Booking error:', err);
       toast.error(err.response?.data?.error || err.response?.data?.message || 'Failed to book appointment');
@@ -839,6 +824,7 @@ export default function PsychologistProfile() {
                       setClientEmail('');
                       setClientPhone('');
                       setShowBookingForm(true);
+                      setBookingSuccess(false);
                     }}
                   >
                     <div className="flex items-center justify-between">
@@ -911,7 +897,7 @@ export default function PsychologistProfile() {
                 <CalendarIcon className="h-4 w-4 sm:h-6 sm:w-6 text-blue-600" />
               </div>
               <h2 className="text-lg sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
-                Book Appointment
+                {bookingSuccess ? 'Booking Confirmed!' : 'Book Appointment'}
               </h2>
               <div className="bg-blue-50 p-2 sm:p-4 rounded-lg">
                 <p className="text-blue-800 font-medium text-xs sm:text-base">
@@ -923,54 +909,74 @@ export default function PsychologistProfile() {
               </div>
             </div>
 
-            <form onSubmit={handleBookAppointment}>
-              <div className="space-y-3 sm:space-y-4">
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
-                    placeholder="your@email.com"
-                    value={clientEmail}
-                    onChange={(e) => setClientEmail(e.target.value)}
-                    disabled={isBooking}
-                  />
+            {bookingSuccess ? (
+              <div className="text-center py-4">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="h-8 w-8 text-green-600" />
                 </div>
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-                    Phone Number (Optional)
-                  </label>
-                  <input
-                    type="tel"
-                    className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
-                    placeholder="+1 (555) 123-4567"
-                    value={clientPhone}
-                    onChange={(e) => setClientPhone(e.target.value)}
-                    disabled={isBooking}
-                  />
-                </div>
-                <div className="flex space-x-2 sm:space-x-3 pt-3 sm:pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowBookingForm(false)}
-                    className="flex-1 px-3 py-2 sm:px-4 sm:py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium disabled:opacity-50 text-sm sm:text-base"
-                    disabled={isBooking}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 px-3 py-2 sm:px-4 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md disabled:opacity-50 text-sm sm:text-base"
-                    disabled={isBooking}
-                  >
-                    {isBooking ? 'Booking...' : 'Confirm Booking'}
-                  </button>
-                </div>
+                <p className="text-green-600 font-medium mb-4">
+                  Your appointment has been successfully booked!
+                </p>
+                <p className="text-gray-600 text-sm mb-6">
+                  A confirmation has been sent to your email.
+                </p>
+                <button
+                  onClick={() => setShowBookingForm(false)}
+                  className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium"
+                >
+                  Close
+                </button>
               </div>
-            </form>
+            ) : (
+              <form onSubmit={handleBookAppointment}>
+                <div className="space-y-3 sm:space-y-4">
+                  <div>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                      placeholder="your@email.com"
+                      value={clientEmail}
+                      onChange={(e) => setClientEmail(e.target.value)}
+                      disabled={isBooking}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                      Phone Number (Optional)
+                    </label>
+                    <input
+                      type="tel"
+                      className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                      placeholder="+1 (555) 123-4567"
+                      value={clientPhone}
+                      onChange={(e) => setClientPhone(e.target.value)}
+                      disabled={isBooking}
+                    />
+                  </div>
+                  <div className="flex space-x-2 sm:space-x-3 pt-3 sm:pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowBookingForm(false)}
+                      className="flex-1 px-3 py-2 sm:px-4 sm:py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium disabled:opacity-50 text-sm sm:text-base"
+                      disabled={isBooking}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 px-3 py-2 sm:px-4 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-sm hover:shadow-md disabled:opacity-50 text-sm sm:text-base"
+                      disabled={isBooking}
+                    >
+                      {isBooking ? 'Booking...' : 'Confirm Booking'}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}
