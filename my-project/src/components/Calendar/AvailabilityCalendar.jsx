@@ -894,7 +894,7 @@ export default function AvailabilityCalendar() {
         )}
 
         {/* Action Buttons */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex justify-end">
             <button
               onClick={() => setShowMap(!showMap)}
@@ -903,10 +903,10 @@ export default function AvailabilityCalendar() {
               {showMap ? 'Hide Map' : 'Show Map'}
             </button>
           </div>
-        </div>
+        </div> */}
 
         {/* Map Section */}
-        {showMap && (
+        {/* {showMap && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6 overflow-hidden">
             <div className="p-6 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Location Overview</h3>
@@ -925,7 +925,7 @@ export default function AvailabilityCalendar() {
               ></iframe>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Calendar Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
