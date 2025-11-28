@@ -1,0 +1,11 @@
+#     GROUP 14
+**GROUP MEMBERS AND ROLES**
+---------------------------------------
+|---NAME--|           |--ROLE--
+---------------------------------------
+VICTOR ODUOR          Frontend (UI/UX)
+LEWIS                 (Backend) 
+JEPTUM BRENDA         (Presentation)
+LUCY             
+LIZZY
+
