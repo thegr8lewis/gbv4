@@ -3,7 +3,7 @@
 services:
   - type: web
     name: gbv4
-    env: static
+    #env: static
     buildCommand: cd my-project && npm install && npm run build
     staticPublishPath: my-project/dist
     routes:

@@ -2,6 +2,8 @@
 
 SafeSpace is a web application designed to connect individuals seeking mental health support with qualified psychologists. The platform provides a safe and confidential environment for users to find psychologists, book appointments, and manage their sessions. It also includes dedicated interfaces for psychologists to manage their profiles and availability, and for administrators to oversee the platform.
 
+**View hosted live webapp**
+<a href='https://gbv4-i4rw.onrender.com' style="color:green; padding:10px; cursor:pointer;">View live site</a>
 ## Features
 
 - **Role-based Access:** Separate interfaces and functionalities for Users, Psychologists, and Administrators.
