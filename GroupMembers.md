@@ -1,15 +1,17 @@
 #     GROUP 14
 **GROUP MEMBERS AND ROLES**
+
 ---------------------------------------
-|---NAME-----|         |--ROLE--
----------------------------------------
-VICTOR ODUOR |--------| Frontend (UI/UX)
+VICTOR ODUOR Frontend (UI/UX)
 ----------------------------------------
-LEWIS        |--------|(Backend) 
+LEWIS Momanyi (Backend) 
 -----------------------------------------
-JEPTUM BRENDA|--------|(Presentation)
+JEPTUM BRENDA  (Presentation)
 -----------------------------------------
-LUCY         |--------|   
+LUCY Wambui
 ------------------------------------------- 
-LIZZY        |--------| 
+LIZPENCER ADHIAMBO
+------------------------------------------
+MAUREEN GATHONI
+------------------------------------------
 
